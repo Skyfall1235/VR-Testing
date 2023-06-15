@@ -11,7 +11,7 @@ public class C_Firearm : MonoBehaviour
 
     [SerializeField] private FiringMode firingMode;
     [SerializeField] private gunType gunType;
-    [SerializeField] private GunPart gunPart = GunPart.Gun;
+    [SerializeField] private GunPart gunPart;
 
     protected float weight;
     protected int magazineSizeMax;

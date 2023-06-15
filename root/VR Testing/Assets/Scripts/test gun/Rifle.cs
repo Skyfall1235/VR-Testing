@@ -9,20 +9,23 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class Rifle : MonoBehaviour
 {
     //basic values for gun
-    [SerializeField] GameObject projectile;
+    [SerializeField] private GameObject projectilePrefab;
     [SerializeField] Transform instatiationPoint;
     [SerializeField] XRSocketInteractor magazineSocket;
 
     //needed to select and select exit the boject
     [SerializeField] GameObject currentMagazineObject;
-    [SerializeField] Magazine currentEquipedMagazine;
-    
+    [SerializeField] MagazineData currentEquipedMagazine;
+
+    gunType rifleType = gunType.rifle;
+    GunPart riflePart = GunPart.Gun;
 
     private int currentAmmo = 0;
     private bool roundChambered = false;
 
+    [SerializeField] private Sighthandler sighthandler;
 
-    //get these from magazine
+    //the guns check of all the magzine data
 
 
 
@@ -32,13 +35,18 @@ public class Rifle : MonoBehaviour
     {
         //check if have ammo.
         //if has ammo, deduct 1 and call the shoot method
+        GameObject projectile = Instantiate(projectilePrefab, instatiationPoint.position, instatiationPoint.rotation);
+        //give it force at the location relative to the direction of the user
+        //projectile.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0, 0, projectileLaunchVelocity));
 
     }
 
     public void shoot()
     {
-        if (roundChambered)
+        if (roundChambered && currentMagazineObject != null )
         {
+            currentEquipedMagazine.currentAmmo--;
+            AssignMagazineInfo(currentEquipedMagazine);
             //shoot the projectile
             roundChambered = false;
         }
@@ -46,41 +54,54 @@ public class Rifle : MonoBehaviour
         
         RackRound();
     }
+    private void AssignMagazineInfo(MagazineData magazineData)
+    {
+        currentAmmo = magazineData.currentAmmo;
+
+    }
+    private void RetrieveAmmoInformation()
+    {
+
+    }
 
     public void RackRound()
     {
         if(currentAmmo < 0)
         {
             roundChambered = true;
+            sighthandler.ToggleChamberedIcon(roundChambered);
             //eject a casing
         }
         else
         {
-            roundChambered = true;
+            roundChambered = false;
+            sighthandler.ToggleChamberedIcon(roundChambered);
             //eject last casing
         }
     }
 
     //magazineControl
     //should only run on an attach or detach
-    public void GetMagazineInfo()
+    public void GetMagazineInfo(GameObject magazine)
     {
         //get the magazine fromthe socket and save it locally
-        IXRSelectInteractable magazineInteractable = magazineSocket.GetOldestInteractableSelected();
-        GameObject magazineObject = magazineInteractable.transform.gameObject;
-        Magazine magazineData = magazineObject.GetComponent<Magazine>();
+        //IXRSelectInteractable magazineInteractable = magazineSocket.GetOldestInteractableSelected();
+        //Debug.Log(magazineInteractable);
+        currentMagazineObject = magazine;
+        currentEquipedMagazine = currentMagazineObject.GetComponent<Magazine>().MagazineData;
+        Debug.Log(currentMagazineObject.GetComponent<Magazine>());
 
-        //now, set the current magazine to the
+        //if the magazine is the approrpiate magazine, do this
+        if (currentEquipedMagazine.associatedGun == rifleType && currentEquipedMagazine.part == riflePart)
+        {
+            AssignMagazineInfo(currentEquipedMagazine);
+            Debug.Log("storing the data from the magazine");
+        }
+        
+        //else, purge he magazine info and turn off the
     }   
     
-    private void AssignMagazineInfo(Magazine magazine)
-    {
-        XRBaseInteractor socketInteractor = GetComponent<XRBaseInteractor>();
-        //may need to run everytime shoot is called, and on the enter of the magazine
-        XRSocketInteractor interactable = GetComponent<XRSocketInteractor>();
-        //yourSocket.interactionManager.SelectExit(yourSocket, itemSocketed)
-        socketInteractor.ForceDeselect();
-    }
+
 
     //run on detach
     public void PurgeMagazineInfo()
@@ -90,8 +111,10 @@ public class Rifle : MonoBehaviour
 
     //method to handle Gun UI
 
-    private void ShowUI()
+    private void UpdateUI()
     {
-
+        sighthandler.SetAmmoCounter(currentEquipedMagazine.currentAmmo, currentEquipedMagazine.maxAmmoAmount);
     }
 }
+
+
