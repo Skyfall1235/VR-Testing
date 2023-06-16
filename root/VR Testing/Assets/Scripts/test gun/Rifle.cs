@@ -84,30 +84,33 @@ public class Rifle : MonoBehaviour
     //should only run on an attach or detach
     public void GetMagazineInfo(GameObject magazine)
     {
+        //empty just o si can purge shit when its needed
+        MagazineData emptyMagazineData = new MagazineData();
         //get the magazine fromthe socket and save it locally
         //IXRSelectInteractable magazineInteractable = magazineSocket.GetOldestInteractableSelected();
         //Debug.Log(magazineInteractable);
         currentMagazineObject = magazine;
-        currentEquipedMagazine = currentMagazineObject.GetComponent<Magazine>().MagazineData;
-        Debug.Log(currentMagazineObject.GetComponent<Magazine>());
-
-        //if the magazine is the approrpiate magazine, do this
-        if (currentEquipedMagazine.associatedGun == rifleType && currentEquipedMagazine.part == riflePart)
+        if (currentMagazineObject != null)
         {
-            AssignMagazineInfo(currentEquipedMagazine);
-            Debug.Log("storing the data from the magazine");
+            currentEquipedMagazine = currentMagazineObject.GetComponent<Magazine>().MagazineData;
+            Debug.Log(currentMagazineObject.GetComponent<Magazine>());
+
+            //if the magazine is the approrpiate magazine, do this
+            if (currentEquipedMagazine.associatedGun == rifleType && currentEquipedMagazine.part == riflePart)
+            {
+                AssignMagazineInfo(currentEquipedMagazine);
+                Debug.Log("storing the data from the magazine");
+            }
         }
+        else
+        {
+            currentEquipedMagazine = emptyMagazineData;
+
+        }
+        
         
         //else, purge he magazine info and turn off the
     }   
-    
-
-
-    //run on detach
-    public void PurgeMagazineInfo()
-    {
-
-    }
 
     //method to handle Gun UI
 
