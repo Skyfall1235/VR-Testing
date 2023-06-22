@@ -37,8 +37,10 @@ public class Magazine : MonoBehaviour
         {
             Debug.Log("collided with a rifle");
             collision.gameObject.GetComponent<Rifle>().GetMagazineInfo(this.gameObject);
+            collision.gameObject.GetComponent<Rifle>().GetMagazineInfo(null);
         }
     }
+
 }
 [System.Serializable]
 public struct MagazineData 
