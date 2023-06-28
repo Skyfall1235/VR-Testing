@@ -17,6 +17,7 @@ public class syncBody : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+            
         transform.localPosition = new Vector3(xrController.center.x, xrController.height - bodyOffset, xrController.center.z);
         //Quaternion cameriaAdjusted = new Vector3(bodyOffset, 0, 0);
         //transform.rotation = Quaternion.Euler(0, cameraDirection.transform.forward.y, 0);
@@ -30,7 +31,7 @@ public class syncBody : MonoBehaviour
 
     private void DebugRay()
     {
-        Debug.Log("sending Ray");
+        //Debug.Log("sending Ray");
         Vector3 position = transform.position;
         Vector3 forwardDirection = new Vector3(0, cameraDirection.transform.rotation.y, 0);
 
