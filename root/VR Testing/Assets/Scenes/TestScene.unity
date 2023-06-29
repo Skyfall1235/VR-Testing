@@ -6212,6 +6212,9 @@ GameObject:
   - component: {fileID: 807096692}
   - component: {fileID: 807096694}
   - component: {fileID: 807096693}
+  - component: {fileID: 807096697}
+  - component: {fileID: 807096696}
+  - component: {fileID: 807096695}
   m_Layer: 7
   m_Name: RightHand Controller
   m_TagString: Right Hand
@@ -6531,6 +6534,112 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &807096695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807096687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b30eedf21015e1449ed8e6901ae8a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_gestureRecognitionEnabled: 0
+  m_gestureTimeoutThreshold: 0
+  m_activationBoxCollider: {fileID: 0}
+  m_XRGestures:
+  - m_observationObject: {fileID: 0}
+    m_detectionShapeInfo:
+      m_primitiveDetectionShape: 0
+      m_primitiveDetectionShapeSize: 0
+      m_useScaledSize: 0
+      m_customScaledSize: {x: 0, y: 0, z: 0}
+    m_GestureInputType: 0
+    m_selectedGestureStyle: 0
+  m_trackedGestureObjects:
+  - m_name: 
+    m_gestureObject: {fileID: 0}
+    m_placement: 0
+    m_startAction:
+      m_UseReference: 0
+      m_Action:
+        m_Name: Start
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 94012373-2c7a-4dd3-9fde-d67fe47336ef
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 0}
+--- !u!114 &807096696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807096687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cefeb7da7487484dae7dace97e74e7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_interactionDetermineCollider: {fileID: 0}
+  pinchAnimationAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Pinch Animation
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 5e25a0cb-d262-412d-857f-e6f462767469
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  gripAnimationAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Grip Animation
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: bcff3862-491f-403b-bc2d-a5f11d48b062
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  m_GestureInputType: 0
+  m_selectedGestureStyle: 0
+  m_observationObject: {fileID: 0}
+  m_detectionShapeInfo:
+    m_primitiveDetectionShape: 0
+    m_primitiveDetectionShapeSize: 0
+    m_useScaledSize: 0
+    m_customScaledSize: {x: 0, y: 0, z: 0}
+--- !u!65 &807096697
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807096687}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &839501881
 GameObject:

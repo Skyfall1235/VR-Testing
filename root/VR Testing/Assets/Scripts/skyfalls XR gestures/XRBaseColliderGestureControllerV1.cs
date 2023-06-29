@@ -7,11 +7,22 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(BoxCollider))]
 public class XRBaseColliderGestureController : MonoBehaviour
 {
+    /// <summary>
+    /// Represents the box Collider that determines where a player is able to perform a gesture
+    /// </summary>
+    [SerializeField] protected BoxCollider m_interactionDetermineCollider;
+    public BoxCollider InteractionDetermineCollider
+    {
+        get { return m_interactionDetermineCollider; }
+        set { m_interactionDetermineCollider = value; }
+    }
+
+
     //we will need the input action proterties, as well as allow this method to be overridded to allow for addtional inputs
     public InputActionProperty pinchAnimationAction;
     public InputActionProperty gripAnimationAction;
 
-    //somewhere we will need to require a greater collider for the detection of when the actions can even be allowed to occuur.
+ 
 
 
     //set a runtime for the object to created when a series of possible triggers are selected (probably determined by enum
@@ -26,7 +37,7 @@ public class XRBaseColliderGestureController : MonoBehaviour
     }
 
     [SerializeField] protected GestureInputTriggerType m_GestureInputType;
-    public GestureInputTriggerType gestureInputType
+    public GestureInputTriggerType GestureInputType
     {
         get { return m_GestureInputType; }
         set { m_GestureInputType = value; }
@@ -34,8 +45,29 @@ public class XRBaseColliderGestureController : MonoBehaviour
     }
 
 
+    public enum GestureStyle
+    { 
+        SinglePoint,
+        MultiPoint,
+        RotationSingle,
+        RotationMultiDirectional,
+        FreeRotation
+    }
+    [SerializeField] protected GestureStyle m_selectedGestureStyle;
+    public GestureStyle SelectedGestureStyle
+    {
+        get { return m_selectedGestureStyle; }
+        set { m_selectedGestureStyle = value; }
+
+    }
+
+
+
     //we need to protect the gameobject that is spawned, buty it also needed to be an inhereited memeber for future scripts
     //observation object for the trigger
+
+    //the observation object will alwatys be the collider that is spawned
+
     [SerializeField] protected  GameObject m_observationObject;
     public GameObject ObservationObject
     {
@@ -92,10 +124,12 @@ public class XRBaseColliderGestureController : MonoBehaviour
             set { m_customScaledSize = value; }
         }
     }
+
+
     /// <summary>
     /// The detection shape information.
     /// </summary>
-    [SerializeField] protected DetectionShapeSettings m_detectionShapeInfo = new DetectionShapeSettings();
+    [SerializeField] protected DetectionShapeSettings m_detectionShapeInfo = new();
     public DetectionShapeSettings DetectionShapeInfo
     {
         get { return m_detectionShapeInfo; }
@@ -104,7 +138,11 @@ public class XRBaseColliderGestureController : MonoBehaviour
 
 
 
-
+    /// <summary>
+    /// Creates an empty gameobject with a collider of a given shape and scale, and then returns the object
+    /// </summary>
+    /// <param name="shapeSettings">The design specifications of the </param>
+    /// <returns></returns>
     protected GameObject CreateColliderObject( DetectionShapeSettings shapeSettings)
     {
         GameObject colliderObject = GameObject.CreatePrimitive(shapeSettings.PrimitiveDetectionShape);
@@ -125,6 +163,7 @@ public class XRBaseColliderGestureController : MonoBehaviour
         return colliderObject;
     }
 
+
     /// <summary>
     /// Scales a vector by the specified size value to create a new scaled vector.
     /// </summary>
@@ -132,9 +171,31 @@ public class XRBaseColliderGestureController : MonoBehaviour
     /// <returns>The new scaled vector.</returns>
     private Vector3 ScaleObjectbyPrimitive(float sizeToScaleTo)
     {
+        //created a normalized 1,1,1 vector t scale by the required size in order to prepare the collider
         Vector3 primitiveScaledVector = new Vector3(1,1,1) * sizeToScaleTo;
         return primitiveScaledVector;
     }
+
+
+
+    //next up, we create the methods that create the collider
+
+    /// <summary>
+    /// begins the Gesture. Parameters determine how colliders interact and track the position/roation of objects involved
+    /// </summary>
+    /// <param name="gestureInputStartType">What type of gesture the User Plans To do</param>
+    /// <param name="gestureStyle"></param>
+    protected void StartGesture(GestureInputTriggerType gestureInputStartType, GestureStyle gestureStyle)
+    {
+
+    }
+    private void Start()
+    {
+        //JUST FOR REFERENCE
+        StartGesture(GestureInputType, SelectedGestureStyle);
+        //StartGesture()
+    }
+
 
     //wee need to create the gamebojest with the collider
 

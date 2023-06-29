@@ -44,4 +44,8 @@ public class syncBody : MonoBehaviour
         // Draw the debug line from the object's position to the end position
         Debug.DrawLine(position, endPosition, Color.red);
     }
+
+
+    //to expand on this you could have a smoothing motion or a thershold or rotation hit before turning with the head, and then a set delay before turning fulling towards the players direction, or not at all
+
 }
