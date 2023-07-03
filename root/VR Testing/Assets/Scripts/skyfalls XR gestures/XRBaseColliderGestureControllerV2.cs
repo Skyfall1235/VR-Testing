@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,11 +13,27 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     [SerializeField] private bool m_gestureRecognitionEnabled;
     [SerializeField] private float m_gestureTimeoutThreshold;//in seconds
     [SerializeField] private BoxCollider m_activationBoxCollider;
-    [SerializeField] private List<XRGesture> m_XRGestures = new();
-    [SerializeField] private List<XRGestureObject> m_trackedGestureObjects = new();
-
+    [SerializeField] private List<XRGesture> m_XRGestures = new(); //the list of each custom gesture
+    [SerializeField] private List<XRGestureObject> m_trackedGestureObjects = new(); // what objects are to be tracked for which gesture
     //inputs
 
+
+
+    //set up the collider objects
+    private GameObject DetectionColliderSetup(DetectionShapeSettings settingsData)
+    {
+        // Create a primitive GameObject
+        GameObject primitiveObject = GameObject.CreatePrimitive(settingsData.PrimitiveDetectionShape);
+
+        // Remove the mesh renderer and mesh filter components
+        Destroy(primitiveObject.GetComponent<MeshRenderer>());
+        Destroy(primitiveObject.GetComponent<MeshFilter>());
+        return primitiveObject;
+    }
+    private void SetupDetectionCollider(GameObject primativeObject, XRGesture gesture)
+    {
+        //get the list, add a new index item and save this info to it
+    }
 }
 
 
@@ -25,12 +42,17 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
 [System.Serializable]
 public struct XRGesture
 {
-    string m_gestureName;
-    float m_gestureTimeout;
+    [SerializeField] string m_gestureName;
+    [SerializeField] float m_gestureTimeout;
+
+    //constants
+    const float detectionshapeBaseSize = 1f;
+    const int SinglePointGestureColliderAmount = 1;
 
 
-    private List<XRGestureObject> relevantGestureObjects;//will be initialised with the objects needed
-    [SerializeField] private GameObject m_observationObject;
+    [SerializeField] private List<XRGestureObject> relevantGestureObjects;//will be initialised with the objects needed
+    [SerializeField] private GameObject m_observationObject; //observation object is the first collider that is spawned, and determines  hwere the next collider should be
+
     public GameObject ObservationObject
     {
         get { return m_observationObject; }
@@ -50,18 +72,28 @@ public struct XRGesture
         get { return m_GestureInputType; }
         set { m_GestureInputType = value; }
     }
+    //ya know waht, we can add rotational gestures in later as an extension. i give up :/
 
-    [SerializeField] private GestureStyle m_selectedGestureStyle;
-    public GestureStyle SelectedGestureStyle
-    {
-        get { return m_selectedGestureStyle; }
-        set { m_selectedGestureStyle = value; }
-    }
+    private List<detectionColliderInitializationInfo> m_detectionColliderInitializationInfos;
 
+}
 
+[System.Serializable]
+public struct detectionColliderInitializationInfo
+{
+    public GameObject colliderGameobject;
+    //number in series
+    public int seriesNumber;
+    //if its been collided with the tracked object yet
+    public bool reachedDetectionPoint;
+    //its trasnform
+    public Transform colliderObjectTransform;
+    //its collider
+    public Collider objectCollider;
 
 
 }
+
 [System.Serializable]
 public struct XRGestureObject
 {
@@ -123,15 +155,6 @@ public enum GesturePlacement
     Head
 }
 [System.Serializable]
-public enum GestureStyle
-{
-    SinglePoint,
-    MultiPoint,
-    RotationSingle,
-    RotationMultiDirectional,
-    FreeRotation
-}
-[System.Serializable]
 public enum GestureInputTriggerType
 {
     Trigger,
@@ -142,7 +165,3 @@ public enum GestureInputTriggerType
     Other
 }
 #endregion
-
-
-
-

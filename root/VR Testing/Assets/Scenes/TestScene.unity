@@ -2248,6 +2248,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc368af7162dfd4ba67c62e9f782df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textToModify: {fileID: 0}
+  displaytext: you made a button!
 --- !u!114 &241727451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6551,14 +6553,16 @@ MonoBehaviour:
   m_gestureTimeoutThreshold: 0
   m_activationBoxCollider: {fileID: 0}
   m_XRGestures:
-  - m_observationObject: {fileID: 0}
+  - m_gestureName: 
+    m_gestureTimeout: 0
+    relevantGestureObjects: []
+    m_observationObject: {fileID: 0}
     m_detectionShapeInfo:
       m_primitiveDetectionShape: 0
       m_primitiveDetectionShapeSize: 0
       m_useScaledSize: 0
       m_customScaledSize: {x: 0, y: 0, z: 0}
     m_GestureInputType: 0
-    m_selectedGestureStyle: 0
   m_trackedGestureObjects:
   - m_name: 
     m_gestureObject: {fileID: 0}
@@ -6613,7 +6617,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   m_GestureInputType: 0
-  m_selectedGestureStyle: 0
+  m_selectedGestureStyle: 2
   m_observationObject: {fileID: 0}
   m_detectionShapeInfo:
     m_primitiveDetectionShape: 0
@@ -12729,6 +12733,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc368af7162dfd4ba67c62e9f782df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textToModify: {fileID: 0}
+  displaytext: you made a button!
 --- !u!114 &1618362633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14090,6 +14096,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc368af7162dfd4ba67c62e9f782df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textToModify: {fileID: 0}
+  displaytext: you made a button!
 --- !u!114 &1721576347
 MonoBehaviour:
   m_ObjectHideFlags: 0
