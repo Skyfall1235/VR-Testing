@@ -2,13 +2,13 @@
 The XRGesture Toolkit is a virtual reality gesture controller designed to enhance user interactions and experiences in Unity applications. It provides developers with a set of tools and features to easily incorporate hand gestures and interactions into their virtual reality projects.
 
 ## Features
-1. Seamless integration of hand gestures in virtual reality applications.
-2. Real-time tracking of hand movements and gestures.
-3. Customizable gesture recognition and mapping.
-4. Support for both single hand and dual hand gestures.
-5. Highly accurate and responsive gesture recognition algorithms.
-6. Flexible API for developers to extend and customize functionality.
-7. Intuitive and user-friendly interface for configuring gestures.
+- Seamless integration of hand gestures in virtual reality applications.
+- Real-time tracking of hand movements and gestures.
+- Customizable gesture recognition and mapping.
+- Support for both single hand and dual hand gestures.
+- Highly accurate and responsive gesture recognition algorithms.
+- Flexible API for developers to extend and customize functionality.
+- Intuitive and user-friendly interface for configuring gestures.
 ## Supported Platforms
 The XRGesture Toolkit is supported on the following platforms:
 
