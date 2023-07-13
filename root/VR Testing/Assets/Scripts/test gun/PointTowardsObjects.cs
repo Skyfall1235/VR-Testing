@@ -74,7 +74,7 @@ public class PointTowardsObjects : MonoBehaviour
         }
         else
         {
-            Debug.Log(angle);
+            //Debug.Log(angle);
             return false;
         }
     }

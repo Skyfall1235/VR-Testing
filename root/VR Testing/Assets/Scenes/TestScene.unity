@@ -2208,7 +2208,6 @@ GameObject:
   - component: {fileID: 241727449}
   - component: {fileID: 241727452}
   - component: {fileID: 241727451}
-  - component: {fileID: 241727450}
   m_Layer: 0
   m_Name: displayText
   m_TagString: Untagged
@@ -2236,20 +2235,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &241727450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 241727448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffc368af7162dfd4ba67c62e9f782df7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textToModify: {fileID: 0}
-  displaytext: you made a button!
 --- !u!114 &241727451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2630,6 +2615,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 527116985}
   - {fileID: 1101543932}
   m_Father: {fileID: 1938951262}
   m_RootOrder: -1
@@ -3191,6 +3177,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Push Button SOUND
       objectReference: {fileID: 0}
+    - target: {fileID: 8772823145665587544, guid: 274a5caff21721c42909ab76a12c56ac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9070314663427782349, guid: 274a5caff21721c42909ab76a12c56ac,
         type: 3}
       propertyPath: m_RootOrder
@@ -3700,7 +3691,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1721576346}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ButtonVR, Assembly-CSharp
         m_MethodName: DisplayTextToUser
         m_Mode: 1
@@ -4132,6 +4123,170 @@ RectTransform:
   m_AnchoredPosition: {x: -194.4, y: 90.6}
   m_SizeDelta: {x: 146.968, y: 110.471}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &527116984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 527116985}
+  - component: {fileID: 527116987}
+  - component: {fileID: 527116986}
+  m_Layer: 6
+  m_Name: XR gesture Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &527116985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527116984}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.68299985, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 305882418}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &527116986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527116984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b30eedf21015e1449ed8e6901ae8a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_gestureRecognitionEnabled: 0
+  m_gestureTimeoutThreshold: 0
+  m_shoulderWidth: 0.3
+  m_activationBoxCollider: {fileID: 0}
+  m_XRGestures:
+  - m_gestureName: test 1
+    _gestureEnabled: 0
+    m_requirePlacement: 0
+    m_gesturePlacement: 0
+    m_gestureTimeout: 22
+    gestureInProgress: 0
+    m_relevantGestureObjects: []
+    m_observationObject: {fileID: 0}
+    currentIndexLocation: 0
+    m_GestureInputType: 0
+    m_detectionColliderData:
+    - colliderGameobject: {fileID: 0}
+      seriesNumber: 0
+      reachedDetectionPoint: 0
+      colliderObjectTransform: {fileID: 0}
+      colliderPlacementPosition: {x: 1, y: 0, z: 0}
+      objectCollider: {fileID: 0}
+      m_detectionShapeInfo:
+        m_primitiveDetectionShape: 1
+        m_primitiveDetectionShapeSize: 1
+        m_useScaledSize: 0
+        m_customScaledSize: {x: 1, y: 1, z: 0.2}
+    - colliderGameobject: {fileID: 0}
+      seriesNumber: 0
+      reachedDetectionPoint: 0
+      colliderObjectTransform: {fileID: 0}
+      colliderPlacementPosition: {x: 0, y: 0, z: 0}
+      objectCollider: {fileID: 0}
+      m_detectionShapeInfo:
+        m_primitiveDetectionShape: 0
+        m_primitiveDetectionShapeSize: 1
+        m_useScaledSize: 1
+        m_customScaledSize: {x: 1, y: 3, z: 1}
+    - colliderGameobject: {fileID: 0}
+      seriesNumber: 0
+      reachedDetectionPoint: 0
+      colliderObjectTransform: {fileID: 0}
+      colliderPlacementPosition: {x: 0, y: 0, z: 0}
+      objectCollider: {fileID: 0}
+      m_detectionShapeInfo:
+        m_primitiveDetectionShape: 0
+        m_primitiveDetectionShapeSize: 1
+        m_useScaledSize: 1
+        m_customScaledSize: {x: 1, y: 3, z: 1}
+    - colliderGameobject: {fileID: 0}
+      seriesNumber: 0
+      reachedDetectionPoint: 0
+      colliderObjectTransform: {fileID: 0}
+      colliderPlacementPosition: {x: 0, y: 0, z: 0}
+      objectCollider: {fileID: 0}
+      m_detectionShapeInfo:
+        m_primitiveDetectionShape: 0
+        m_primitiveDetectionShapeSize: 1
+        m_useScaledSize: 1
+        m_customScaledSize: {x: 1, y: 3, z: 1}
+    - colliderGameobject: {fileID: 0}
+      seriesNumber: 0
+      reachedDetectionPoint: 0
+      colliderObjectTransform: {fileID: 0}
+      colliderPlacementPosition: {x: 0, y: 0, z: 0}
+      objectCollider: {fileID: 0}
+      m_detectionShapeInfo:
+        m_primitiveDetectionShape: 0
+        m_primitiveDetectionShapeSize: 1
+        m_useScaledSize: 1
+        m_customScaledSize: {x: 1, y: 3, z: 1}
+    - colliderGameobject: {fileID: 0}
+      seriesNumber: 0
+      reachedDetectionPoint: 0
+      colliderObjectTransform: {fileID: 0}
+      colliderPlacementPosition: {x: 0, y: 0, z: 0}
+      objectCollider: {fileID: 0}
+      m_detectionShapeInfo:
+        m_primitiveDetectionShape: 0
+        m_primitiveDetectionShapeSize: 1
+        m_useScaledSize: 1
+        m_customScaledSize: {x: 1, y: 3, z: 1}
+  m_trackedGestureObjects:
+  - m_name: 
+    m_gestureObject: {fileID: 0}
+    m_placement: 0
+    m_startAction:
+      m_UseReference: 0
+      m_Action:
+        m_Name: Start
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 94012373-2c7a-4dd3-9fde-d67fe47336ef
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 0}
+--- !u!65 &527116987
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527116984}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &546115359
 GameObject:
   m_ObjectHideFlags: 0
@@ -6544,25 +6699,27 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 807096687}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b30eedf21015e1449ed8e6901ae8a90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_gestureRecognitionEnabled: 0
   m_gestureTimeoutThreshold: 0
+  m_shoulderWidth: 0.3
   m_activationBoxCollider: {fileID: 0}
   m_XRGestures:
   - m_gestureName: 
+    _gestureEnabled: 0
+    m_requirePlacement: 0
+    m_gesturePlacement: 0
     m_gestureTimeout: 0
-    relevantGestureObjects: []
+    gestureInProgress: 0
+    m_relevantGestureObjects: []
     m_observationObject: {fileID: 0}
-    m_detectionShapeInfo:
-      m_primitiveDetectionShape: 0
-      m_primitiveDetectionShapeSize: 0
-      m_useScaledSize: 0
-      m_customScaledSize: {x: 0, y: 0, z: 0}
+    currentIndexLocation: 0
     m_GestureInputType: 0
+    m_detectionColliderData: []
   m_trackedGestureObjects:
   - m_name: 
     m_gestureObject: {fileID: 0}
@@ -6586,7 +6743,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 807096687}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cefeb7da7487484dae7dace97e74e7a, type: 3}
   m_Name: 
@@ -11575,6 +11732,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Push Button (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4922582553321831162, guid: 76f3439a0ae796e4b81bee3f91f888ee,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5419331889293473514, guid: 76f3439a0ae796e4b81bee3f91f888ee,
         type: 3}
       propertyPath: m_InteractionLayers.m_Bits
@@ -12253,6 +12415,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Push Button (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4922582553321831162, guid: 76f3439a0ae796e4b81bee3f91f888ee,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5419331889293473514, guid: 76f3439a0ae796e4b81bee3f91f888ee,
         type: 3}
       propertyPath: m_InteractionLayers.m_Bits
@@ -12693,7 +12860,6 @@ GameObject:
   - component: {fileID: 1618362631}
   - component: {fileID: 1618362634}
   - component: {fileID: 1618362633}
-  - component: {fileID: 1618362632}
   m_Layer: 0
   m_Name: displayText
   m_TagString: Untagged
@@ -12721,20 +12887,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1618362632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618362630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffc368af7162dfd4ba67c62e9f782df7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textToModify: {fileID: 0}
-  displaytext: you made a button!
 --- !u!114 &1618362633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14056,7 +14208,6 @@ GameObject:
   - component: {fileID: 1721576345}
   - component: {fileID: 1721576348}
   - component: {fileID: 1721576347}
-  - component: {fileID: 1721576346}
   m_Layer: 0
   m_Name: displayText
   m_TagString: Untagged
@@ -14084,20 +14235,6 @@ RectTransform:
   m_AnchoredPosition: {x: 126, y: 56}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1721576346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1721576344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffc368af7162dfd4ba67c62e9f782df7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textToModify: {fileID: 0}
-  displaytext: you made a button!
 --- !u!114 &1721576347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14960,6 +15097,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Push Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 4922582553321831162, guid: 76f3439a0ae796e4b81bee3f91f888ee,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5419331889293473514, guid: 76f3439a0ae796e4b81bee3f91f888ee,
         type: 3}
@@ -17159,6 +17301,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Push Button (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4922582553321831162, guid: 76f3439a0ae796e4b81bee3f91f888ee,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5419331889293473514, guid: 76f3439a0ae796e4b81bee3f91f888ee,
         type: 3}
