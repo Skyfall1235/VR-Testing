@@ -21,7 +21,7 @@ Ensure that you have Unity installed on your system (version 2022.2.1f1 or newer
 Create a new Unity project or open an existing one.
 Open the Package Manager window in Unity by navigating to Window > Package Manager. n/
 Click on the "+" button in the top-left corner of the Package Manager window and select "Add package from git URL."
-In the text field, enter the following URL: https://github.com/username/repo.git (replace username and repo with the appropriate GitHub username and repository name).
+In the text field, enter the following URL: https://github.com/Skyfall1235/VR-Testing
 Click the "Add" button, and Unity will start downloading and importing the XRGesture Toolkit package.
 Wait for the installation process to complete.
 Please note that the XRGesture Toolkit requires the XR Toolkit package from Unity, which provides the foundation for virtual reality development. If you haven't already installed it, follow these steps:
