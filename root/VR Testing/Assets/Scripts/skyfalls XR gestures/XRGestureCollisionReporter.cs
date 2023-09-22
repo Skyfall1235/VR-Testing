@@ -197,11 +197,7 @@ public class XRGestureCollisionReporter : MonoBehaviour
 
 
 
-    //we call the delegate here but the delegate is ON the other object
-    private void CallDelegate(XRBaseColliderGestureControllerV2 controller)
-    {
-        controller.advanceColliderIndexDelegate(m_associatedGesture, gameObject.GetComponent<Collider>(), m_associatedGesture.CurrentIndexLocation);
-    }
+
 
 
     protected virtual void DetermineDelegateCall(XRGestureObject trackedObject)//we dont need to get the collider, its already attached
@@ -226,6 +222,12 @@ public class XRGestureCollisionReporter : MonoBehaviour
                 CallDelegate(m_associatedController);
             }
         }
+    }
+
+    //we call the delegate here but the delegate is ON the other object
+    private void CallDelegate(XRBaseColliderGestureControllerV2 controller)
+    {
+        controller.advanceColliderIndexDelegate(m_associatedGesture, gameObject.GetComponent<Collider>(), m_associatedGesture.CurrentIndexLocation);
     }
 
 
@@ -283,10 +285,4 @@ public class XRGestureCollisionReporter : MonoBehaviour
     }
 
     #endregion
-
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //first see if the pobject is a tracked object.
-    }
 }

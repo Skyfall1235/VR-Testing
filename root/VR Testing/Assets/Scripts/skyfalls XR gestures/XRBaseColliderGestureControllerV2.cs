@@ -30,20 +30,28 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System.Collections;
+using Unity.Collections;
+using System;
 
 [RequireComponent(typeof(BoxCollider))]
 public class XRBaseColliderGestureControllerV2 : MonoBehaviour
 {
     [SerializeField] private bool m_gestureRecognitionEnabled;
-    [SerializeField] private float m_gestureTimeoutThreshold;//in seconds
+
+    [SerializeField] private float m_gestureTimeoutThreshold = 0f;
+    public float GestureTimeoutThreshold { get { return m_gestureTimeoutThreshold; } }//in seconds
+
     public float m_shoulderWidth = 0.3f;
     [SerializeField] private BoxCollider m_activationBoxCollider;
     [SerializeField] private List<XRGesture> m_XRGestures = new(); //the list of each custom gesture
     [SerializeField] public List<XRGestureObject> m_trackedGestureObjects = new(); // what objects are to be tracked for which gesture
     public AdvanceColliderIndexDelegate advanceColliderIndexDelegate = null;
+    [ReadOnly]
+    public List<TimerCoroutine> m_timerCoroutines = new List<TimerCoroutine>();
 
 
-
+    #region Base Mononbehavior Methods
     private void Awake()
     {
         
@@ -56,7 +64,7 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     }
     private void Update()
     {
-        
+        SetUpDetectionObjects();
     }
     private void FixedUpdate()
     {
@@ -70,6 +78,7 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     {
         UnsubscribeToDelegate(advanceColliderIndexDelegate);
     }
+    #endregion
 
 
 
@@ -89,6 +98,56 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     }
 
     #region Setup Methods
+
+
+
+    /// <summary>
+    /// Sets up the detection objects for XRGesture system.
+    /// </summary>
+    private void SetUpDetectionObjects()
+    {
+        // Set up the gesture references.
+        for (int i = 0; i < m_XRGestures.Count; i++)
+        {
+            XRGesture gesture = m_XRGestures[i];
+
+            for (int j = 0; j < gesture.DetectionColliderData.Count; j++)
+            {
+                detectionColliderData data = gesture.DetectionColliderData[j];
+                GameObject modifiedObject = DetectionColliderSetup(data.DetectionShapeInfo, gesture, j);
+
+                // Store the modified object and related data
+                data.colliderGameobject = modifiedObject;
+                data.seriesNumber = j;
+                data.colliderObjectTransform = modifiedObject.GetComponent<Transform>();
+                data.objectCollider = modifiedObject.GetComponent<Collider>();
+                data.DetectionShapeInfo = data.DetectionShapeInfo;
+
+                // Save the updated data back into the gesture
+                gesture.DetectionColliderData[j] = data;
+
+                // Set up the index for the gesture
+                gesture.gestureInProgress = false;
+                gesture.CurrentIndexLocation = 0;
+
+                // Set up the positions
+                modifiedObject.transform.localPosition = data.colliderPlacementPosition;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Destroys the old detection colliders and then uses the collection data to rebuild the object collection
+    /// </summary>
+    private void RegenerateDetectionObjects()
+    {
+        //clear all the children, and then reset
+        DestroyChildrenOfController();
+        SetUpDetectionObjects();
+    }
+
+
     //set up the collider objects when they get spawn in
     /// <summary>
     /// Sets up a detection collider object based on the provided settings data.
@@ -156,42 +215,6 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Sets up the detection objects for XRGesture system.
-    /// </summary>
-    private void SetUpDetectionObjects()
-    {
-        // Set up the gesture references.
-        for (int i = 0; i < m_XRGestures.Count; i++)
-        {
-            XRGesture gesture = m_XRGestures[i];
-
-            for (int j = 0; j < gesture.DetectionColliderData.Count; j++)
-            {
-                detectionColliderData data = gesture.DetectionColliderData[j];
-                GameObject modifiedObject = DetectionColliderSetup(data.DetectionShapeInfo, gesture, j);
-
-                // Store the modified object and related data
-                data.colliderGameobject = modifiedObject;
-                data.seriesNumber = j;
-                data.colliderObjectTransform = modifiedObject.GetComponent<Transform>();
-                data.objectCollider = modifiedObject.GetComponent<Collider>();
-                data.DetectionShapeInfo = data.DetectionShapeInfo;
-
-                // Save the updated data back into the gesture
-                gesture.DetectionColliderData[j] = data;
-
-                // Set up the index for the gesture
-                gesture.gestureInProgress = false;
-                gesture.CurrentIndexLocation = 0;
-
-                // Set up the positions
-                modifiedObject.transform.localPosition = data.colliderPlacementPosition;
-            }
-        }
-    }
-
-
     //add the collision reporter, and set it up.
     /// <summary>
     /// Sets up a collision reporter for a detector object in the XRGesture system.
@@ -210,6 +233,8 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
         if (indexLocation == 0)
         {
             reporter.IsObservationObject = true;
+            CreateInstanceOfTimer(detectorObject, this, gesture);
+            gesture.ObservationObject = detectorObject;
         }
 
         // Fills the reporter's variables with the relevant information
@@ -232,10 +257,33 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
         return detectorObject;
     }
 
+    /// <summary>
+    /// Creates a new instance of XRGestureTimeControl and initializes it with the provided associatedController and associatedGesture.
+    /// </summary>
+    /// <param name="associatedController">The XRBaseColliderGestureControllerV2 associated with the timer control.</param>
+    /// <param name="associatedGesture">The XRGesture associated with the timer control.</param>
+    /// <returns>Returns the created XRGestureTimeControl instance.</returns>
+    public static void CreateInstanceOfTimer(GameObject ObservationGameobject, XRBaseColliderGestureControllerV2 associatedController, XRGesture associatedGesture)
+    {
+        // Add the XRGestureTimeControl component to the GameObject.
+        XRGestureTimeControl timeControlScript = ObservationGameobject.AddComponent<XRGestureTimeControl>();
+        // Initialize the XRGestureTimeControl component with the associatedController and associatedGesture.
+        timeControlScript.AssociatedController = associatedController;
+        timeControlScript.AssociatedGesture = associatedGesture;
+        // Return the created XRGestureTimeControl instance.
+    }
+
+
+    private void DestroyChildrenOfController()
+    {
+        int childCount = transform.childCount;
+        for (int i = childCount - 1; i >= 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+    }
+
     #endregion
-
-
-
 
 
     //now, make subscription events that this controller watches for using delegates on the reporter, and when the flag is flipped, it iterates to the next one
@@ -332,6 +380,64 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
 
     #endregion
 
+
+
+    public void StartGesture(XRGesture gesture)
+    {
+        //create the timer and wait for the first connect on the player to the collider
+    }
+
+
+
+
+
+    /// <summary>
+    /// Interrupts the timer associated with the provided TimerCoroutine and starts a new timer for the associated XRGesture.
+    /// </summary>
+    /// <param name="timerCoroutine">The TimerCoroutine for which to interrupt the timer.</param>
+    private void InterruptGestureTimer(TimerCoroutine timerCoroutine)
+    {
+        // Retrieve the GameObject associated with the provided TimerCoroutine.
+        GameObject gestureObject = timerCoroutine.coroutineGameobject;
+
+        // Get the XRGestureTimeControl component from the GameObject.
+        XRGestureTimeControl timeControl = gestureObject.GetComponent<XRGestureTimeControl>();
+
+        // If the XRGestureTimeControl component is found, interrupt and reload the timer for the associated XRGesture.
+        if (timeControl != null)
+        {
+            timeControl.InterruptAndReloadTimer(timerCoroutine, false);
+        }
+    }
+
+    private void KillTimerInstance(XRGesture gestureTimerToKill)
+    {
+        TimerCoroutine coroutineToKill = new();
+
+        foreach (TimerCoroutine currentGestureTimer in m_timerCoroutines)
+        {
+            if(currentGestureTimer.coroutinesGesture.ObservationObject == gestureTimerToKill.ObservationObject)
+            {
+                coroutineToKill = currentGestureTimer;
+            }
+        }
+        try
+        {
+            coroutineToKill.coroutineGameobject.GetComponent<XRGestureTimeControl>().InterruptAndReloadTimer(coroutineToKill, true);
+        }
+        catch (NullReferenceException ex)
+        {
+            // Handle the NullReferenceException here.
+            Debug.LogError($"Null reference exception occurred: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Handle other exceptions here.
+            Debug.LogError($"An exception occurred: {ex.Message}");
+        }
+
+    }
+
 }
 
 
@@ -375,6 +481,7 @@ public delegate void AdvanceColliderIndexDelegate(XRGesture selectedGesture, Col
 
 #region Data Structures 
 #region struct hell
+
 /// <summary>
 /// Represents a gesture in XR.
 /// </summary>
@@ -386,6 +493,10 @@ public struct XRGesture
     /// </summary>
     [Tooltip("The name of the gesture.")]
     [SerializeField] string m_gestureName;
+    public string GestureName
+    {
+        get { return m_gestureName; }
+    }
 
 
     /// <summary>
@@ -428,7 +539,6 @@ public struct XRGesture
     /// This property determines the placement of the gesture on the object.
     /// </remarks>
     [SerializeField] private GesturePlacement m_gesturePlacement;
-
     /// <summary>
     /// Gets or sets the gesture placement for the object.
     /// </summary>
@@ -443,22 +553,20 @@ public struct XRGesture
     }
 
 
-
-
-
     /// <summary>
     /// The timeout value for the gesture.
     /// </summary>
     [Tooltip("The timeout value for the gesture.")]
-    [SerializeField] float m_gestureTimeout;
+    [SerializeField] private float m_gestureTimeout;
+    public float GestureTimeout
+    {
+        get { return m_gestureTimeout; }
+        set { m_gestureTimeout = value; }
+    }
 
 
     public bool gestureInProgress;
 
-
-    //constants
-    const float detectionshapeBaseSize = 1f;
-    const int SinglePointGestureColliderAmount = 1;
 
 
     /// <summary>
@@ -719,6 +827,28 @@ public struct DetectionShapeSettings
     }
 }
 
+
+/// <summary>
+/// Represents a timer coroutine associated with an XRGesture.
+/// </summary>
+public struct TimerCoroutine
+{
+    /// <summary>
+    /// The XRGesture associated with this timer coroutine.
+    /// </summary>
+    public XRGesture coroutinesGesture;
+
+    /// <summary>
+    /// The actual coroutine that represents the timer.
+    /// </summary>
+    public Coroutine timerCoroutine;
+
+    ///<summary>
+    /// The gameobject associated with this timer coroutine.
+    ///</summary>
+    public GameObject coroutineGameobject;
+}
+
 #endregion
 
 
@@ -797,27 +927,7 @@ public enum GestureInputTriggerType
 #endregion
 #endregion
 
-//notes
-#region doesnt really apply, may be useful later though?
-////IM NOT SURE IF I WILL USE THIS QUITE YET  
 
-//private Vector3 ShiftPositionUsingGesturePlacement(XRGesture selectedGesture, GesturePlacement placement, Transform ModifiedObjectTransform)
-//{
-//    // Shift collider position based on body part
-//    switch (placement)
-//    {
-//        case GesturePlacement.LeftHand:
-//            return ReflectLocalPosition(ModifiedObjectTransform.localPosition, Vector3.right, m_shoulderWidth);
-//        case GesturePlacement.RightHand:
-//            return ReflectLocalPosition(ModifiedObjectTransform.localPosition, Vector3.left, m_shoulderWidth);
-//        case GesturePlacement.Head:
-//            return ReflectLocalPosition(ModifiedObjectTransform.localPosition, Vector3.down, m_shoulderWidth);
-//        default:
-//            return new Vector3(0, 0, 0);//cneter the placement if non selected
-//    }
-//}
-//private Vector3 ReflectLocalPosition(Vector3 position, Vector3 axis, float magnitude)
-//{
-//    return position - 2f * Vector3.Dot(position, axis) * axis * magnitude;
-//}
+#region Notes
+//Notes
 #endregion
