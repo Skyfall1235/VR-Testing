@@ -143,23 +143,7 @@ public class XRGestureCollisionReporter : MonoBehaviour
     /// <summary>
     /// The associated placement for the gesture.
     /// </summary>
-    [SerializeField]
-    private GesturePlacement m_associatedPlacement;
 
-    /// <summary>
-    /// Gets or sets the associated placement for the gesture.
-    /// </summary>
-    public GesturePlacement AssociatedPlacement
-    {
-        get { return m_associatedPlacement; }
-        set
-        {
-            if (LockFields)
-            {
-                m_associatedPlacement = value;
-            }
-        }
-    }
     #endregion
 
     /// <summary>
@@ -212,16 +196,7 @@ public class XRGestureCollisionReporter : MonoBehaviour
             //nump the index
             CallDelegate(m_associatedController);
         }
-        if (m_associatedGesture.RequirePlacement == true)
-        {
-            //does it match placement?
-            bool match = DoesObjectMatchPlacement(trackedObject);
-            if (match)
-            {
-                //bumb up the index
-                CallDelegate(m_associatedController);
-            }
-        }
+
     }
 
     //we call the delegate here but the delegate is ON the other object
@@ -244,23 +219,7 @@ public class XRGestureCollisionReporter : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Checks if the given XRGestureObject matches the associated placement.
-    /// </summary>
-    /// <param name="trackedObject">The XRGestureObject to check.</param>
-    /// <returns>True if the XRGestureObject's placement matches the associated placement, otherwise false.</returns>
-    private bool DoesObjectMatchPlacement(XRGestureObject trackedObject)
-    {
-        // Save the variable so we aren't potentially referring to a changing variable
-        GesturePlacement trackedObjectsPlacement = trackedObject.Placement;
-        if (trackedObjectsPlacement == m_associatedPlacement) { return true; }
-        else
-        {
-            // If gesture doesn't match
-            Debug.Log($"Gesture placement '{m_associatedGesture.GesturePlacement}' does not match {trackedObject}'s placement {trackedObject.Placement}");
-            return false;
-        }
-    }
+
 
 
     /// <summary>

@@ -77,12 +77,10 @@ public class XRGestureTimeControl : MonoBehaviour
         // Start a new timer coroutine for the selected gesture.
         Coroutine newTimerCoroutine = StartCoroutine(CustomTimer(CustomTimerSeconds, selectedGesture));
         // Create a new TimerCoroutine struct to hold information about the started timer.
-        TimerCoroutine newStruct = new TimerCoroutine();
-        newStruct.coroutinesGesture = selectedGesture; // Store the selected gesture in the struct.
-        newStruct.timerCoroutine = newTimerCoroutine; // Store the timer coroutine in the struct.
-        newStruct.coroutineGameobject = this.gameObject;
+
+
         // Add the new TimerCoroutine struct to the list of timer coroutines associated with the controller.
-        m_associatedController.m_timerCoroutines.Add(newStruct);
+
     }
 
 
@@ -91,20 +89,7 @@ public class XRGestureTimeControl : MonoBehaviour
     /// </summary>
     /// <param name="timerCoroutine">The TimerCoroutine to interrupt and reload.</param>
     /// <param name="cancelationToken">The boolean answer to cancel the reload and instead kill the coroutine</param>
-    public void InterruptAndReloadTimer(TimerCoroutine timerCoroutine, bool cancelationToken)
-    {
-        // Retrieve the coroutine associated with the provided TimerCoroutine and stop it.
-        StopCoroutine(timerCoroutine.timerCoroutine);
-        // Increment the CurrentIndexLocation of the associated XRGesture.
-        m_associatedGesture.CurrentIndexLocation++;
-        //if the cancel Token is false, restart the coroutine
-        if(cancelationToken)
-        {
-            return;
-        }
-        // Start a new timer coroutine for the associated XRGesture with the updated index.
-        StartCoroutine(CustomTimer(CustomTimerSeconds, timerCoroutine.coroutinesGesture));
-    }
+
 
 
 
@@ -138,15 +123,7 @@ public class XRGestureTimeControl : MonoBehaviour
     /// <returns>Returns true if the specified XRGesture is found, otherwise false.</returns>
     public bool ContainsGestureTimer(XRGesture gesture)
     {
-        // Loop through the list of timer coroutines associated with the controller.
-        foreach (TimerCoroutine coroutineStruct in m_associatedController.m_timerCoroutines)
-        {
-            // Check if the current coroutine's gesture matches the provided gesture.
-            if (coroutineStruct.coroutinesGesture.GestureName == gesture.GestureName)
-            {
-                return true; // The specified gesture is found in the list of timer coroutines.
-            }
-        }
+
         return false; // The specified gesture is not found in the list of timer coroutines.
     }
 }

@@ -47,8 +47,7 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     [SerializeField] private List<XRGesture> m_XRGestures = new(); //the list of each custom gesture
     [SerializeField] public List<XRGestureObject> m_trackedGestureObjects = new(); // what objects are to be tracked for which gesture
     public AdvanceColliderIndexDelegate advanceColliderIndexDelegate = null;
-    [ReadOnly]
-    public List<TimerCoroutine> m_timerCoroutines = new List<TimerCoroutine>();
+
 
 
     #region Base Mononbehavior Methods
@@ -79,6 +78,9 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
         UnsubscribeToDelegate(advanceColliderIndexDelegate);
     }
     #endregion
+
+
+
 
 
 
@@ -119,8 +121,8 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
                 // Store the modified object and related data
                 data.colliderGameobject = modifiedObject;
                 data.seriesNumber = j;
-                data.colliderObjectTransform = modifiedObject.GetComponent<Transform>();
-                data.objectCollider = modifiedObject.GetComponent<Collider>();
+                //data.colliderObjectTransform = modifiedObject.GetComponent<Transform>();
+                //data.objectCollider = modifiedObject.GetComponent<Collider>();
                 data.DetectionShapeInfo = data.DetectionShapeInfo;
 
                 // Save the updated data back into the gesture
@@ -131,7 +133,7 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
                 gesture.CurrentIndexLocation = 0;
 
                 // Set up the positions
-                modifiedObject.transform.localPosition = data.colliderPlacementPosition;
+                //modifiedObject.transform.localPosition = data.colliderPlacementPosition;
             }
         }
     }
@@ -241,15 +243,6 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
         reporter.AssociatedController = this;
         reporter.TrackedGestureObjects = chosenTrackedGestureObjects;
         reporter.AssociatedGesture = gesture;
-        reporter.RequirePlacement = gesture.RequirePlacement;
-        if(gesture.RequirePlacement)
-        {
-            reporter.AssociatedPlacement = gesture.GesturePlacement;
-        }
-        else
-        {
-            reporter.AssociatedPlacement = GesturePlacement.None;
-        }
 
         //finally, lock the fields by chasnging thier setter using a nice lil bool
         reporter.LockFields = true;
@@ -292,16 +285,16 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     /// </summary>
     /// <param name="selectedGesture">The selected XRGesture object.</param>
     /// <param name="triggeredCollider">The collider that triggered the advancement.</param>
-    private void AdvanceColliderIndex(XRGesture selectedGesture, Collider triggeredCollider, int currentIndexLocation)
+     private void AdvanceColliderIndex(XRGesture selectedGesture, Collider triggeredCollider, int currentIndexLocation)
     {
-        if (selectedGesture.DetectionColliderData[currentIndexLocation].objectCollider == triggeredCollider)
-        {
-            selectedGesture.CurrentIndexLocation++; // Bump up to the next value so we can check the next collider
-        }
-        else
-        {
-            return;
-        }
+        //if (selectedGesture.DetectionColliderData[currentIndexLocation].objectCollider == triggeredCollider)
+        //{
+        //    selectedGesture.CurrentIndexLocation++; // Bump up to the next value so we can check the next collider
+        //}
+        //else
+        //{
+        //    return;
+        //}
         //these automatically check if the gesture is in the middle of its sequence or at the end
         PerformCustomActionAtIndexValue(selectedGesture);
 
@@ -395,46 +388,11 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     /// Interrupts the timer associated with the provided TimerCoroutine and starts a new timer for the associated XRGesture.
     /// </summary>
     /// <param name="timerCoroutine">The TimerCoroutine for which to interrupt the timer.</param>
-    private void InterruptGestureTimer(TimerCoroutine timerCoroutine)
-    {
-        // Retrieve the GameObject associated with the provided TimerCoroutine.
-        GameObject gestureObject = timerCoroutine.coroutineGameobject;
 
-        // Get the XRGestureTimeControl component from the GameObject.
-        XRGestureTimeControl timeControl = gestureObject.GetComponent<XRGestureTimeControl>();
-
-        // If the XRGestureTimeControl component is found, interrupt and reload the timer for the associated XRGesture.
-        if (timeControl != null)
-        {
-            timeControl.InterruptAndReloadTimer(timerCoroutine, false);
-        }
-    }
 
     private void KillTimerInstance(XRGesture gestureTimerToKill)
     {
-        TimerCoroutine coroutineToKill = new();
 
-        foreach (TimerCoroutine currentGestureTimer in m_timerCoroutines)
-        {
-            if(currentGestureTimer.coroutinesGesture.ObservationObject == gestureTimerToKill.ObservationObject)
-            {
-                coroutineToKill = currentGestureTimer;
-            }
-        }
-        try
-        {
-            coroutineToKill.coroutineGameobject.GetComponent<XRGestureTimeControl>().InterruptAndReloadTimer(coroutineToKill, true);
-        }
-        catch (NullReferenceException ex)
-        {
-            // Handle the NullReferenceException here.
-            Debug.LogError($"Null reference exception occurred: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            // Handle other exceptions here.
-            Debug.LogError($"An exception occurred: {ex.Message}");
-        }
 
     }
 
@@ -479,453 +437,453 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
 public delegate void AdvanceColliderIndexDelegate(XRGesture selectedGesture, Collider triggeredCollider, int currentIndexLocation);
 
 
-#region Data Structures 
-#region struct hell
-
-/// <summary>
-/// Represents a gesture in XR.
-/// </summary>
-[System.Serializable]
-public struct XRGesture
-{
-    /// <summary>
-    /// The name of the gesture.
-    /// </summary>
-    [Tooltip("The name of the gesture.")]
-    [SerializeField] string m_gestureName;
-    public string GestureName
-    {
-        get { return m_gestureName; }
-    }
-
-
-    /// <summary>
-    /// Determines whether the gesture is enabled or not.
-    /// </summary>
-    [Tooltip("Determines whether the gesture is enabled or not.")]
-    [SerializeField] private bool _gestureEnabled;
-    /// <summary>
-    /// Gets or sets a value indicating whether the gesture is enabled or not.
-    /// </summary>
-    public bool gestureEnabled
-    {
-        get { return _gestureEnabled; }
-        set { _gestureEnabled = value; }
-    }
-
-
-    /// <summary>
-    /// Private backing field for the RequirePlacement property.
-    /// </summary>
-    [SerializeField] private bool m_requirePlacement;
-    /// <summary>
-    /// Gets or sets a value indicating whether placement is required.
-    /// </summary>
-    /// <remarks>
-    /// Set this to true if placement is required; otherwise, set it to false.
-    /// </remarks>
-    public bool RequirePlacement
-    {
-        get { return m_requirePlacement; }
-        set { m_requirePlacement = value; }
-    }
-
-
-    //## i would hide this if the bool above was false
-    /// <summary>
-    /// The gesture placement for the object.
-    /// </summary>
-    /// <remarks>
-    /// This property determines the placement of the gesture on the object.
-    /// </remarks>
-    [SerializeField] private GesturePlacement m_gesturePlacement;
-    /// <summary>
-    /// Gets or sets the gesture placement for the object.
-    /// </summary>
-    /// <value>The gesture placement.</value>
-    /// <remarks>
-    /// Use this property to get or set the placement of the gesture on the object.
-    /// </remarks>
-    public GesturePlacement GesturePlacement
-    {
-        get { return m_gesturePlacement; }
-        set { m_gesturePlacement = value; }
-    }
-
-
-    /// <summary>
-    /// The timeout value for the gesture.
-    /// </summary>
-    [Tooltip("The timeout value for the gesture.")]
-    [SerializeField] private float m_gestureTimeout;
-    public float GestureTimeout
-    {
-        get { return m_gestureTimeout; }
-        set { m_gestureTimeout = value; }
-    }
-
-
-    public bool gestureInProgress;
-
-
-
-    /// <summary>
-    /// The list of relevant gesture objects for the gesture.
-    /// </summary>
-    [Tooltip("The list of relevant objects that are to be tracked for the gesture.")]
-    [SerializeField] private List<XRGestureObject> m_relevantGestureObjects;
-    public List<XRGestureObject> RelevantGestureObjects
-    {
-        get { return m_relevantGestureObjects; }
-        set { m_relevantGestureObjects = value; }
-    }
-
+//#region Data Structures 
+//#region struct hell
+
+///// <summary>
+///// Represents a gesture in XR.
+///// </summary>
+//[System.Serializable]
+//public struct XRGesture
+//{
+//    /// <summary>
+//    /// The name of the gesture.
+//    /// </summary>
+//    [Tooltip("The name of the gesture.")]
+//    [SerializeField] string m_gestureName;
+//    public string GestureName
+//    {
+//        get { return m_gestureName; }
+//    }
+
+
+//    /// <summary>
+//    /// Determines whether the gesture is enabled or not.
+//    /// </summary>
+//    [Tooltip("Determines whether the gesture is enabled or not.")]
+//    [SerializeField] private bool _gestureEnabled;
+//    /// <summary>
+//    /// Gets or sets a value indicating whether the gesture is enabled or not.
+//    /// </summary>
+//    public bool gestureEnabled
+//    {
+//        get { return _gestureEnabled; }
+//        set { _gestureEnabled = value; }
+//    }
+
+
+//    /// <summary>
+//    /// Private backing field for the RequirePlacement property.
+//    /// </summary>
+//    [SerializeField] private bool m_requirePlacement;
+//    /// <summary>
+//    /// Gets or sets a value indicating whether placement is required.
+//    /// </summary>
+//    /// <remarks>
+//    /// Set this to true if placement is required; otherwise, set it to false.
+//    /// </remarks>
+//    public bool RequirePlacement
+//    {
+//        get { return m_requirePlacement; }
+//        set { m_requirePlacement = value; }
+//    }
+
+
+//    //## i would hide this if the bool above was false
+//    /// <summary>
+//    /// The gesture placement for the object.
+//    /// </summary>
+//    /// <remarks>
+//    /// This property determines the placement of the gesture on the object.
+//    /// </remarks>
+//    [SerializeField] private GesturePlacement m_gesturePlacement;
+//    /// <summary>
+//    /// Gets or sets the gesture placement for the object.
+//    /// </summary>
+//    /// <value>The gesture placement.</value>
+//    /// <remarks>
+//    /// Use this property to get or set the placement of the gesture on the object.
+//    /// </remarks>
+//    public GesturePlacement GesturePlacement
+//    {
+//        get { return m_gesturePlacement; }
+//        set { m_gesturePlacement = value; }
+//    }
+
+
+//    /// <summary>
+//    /// The timeout value for the gesture.
+//    /// </summary>
+//    [Tooltip("The timeout value for the gesture.")]
+//    [SerializeField] private float m_gestureTimeout;
+//    public float GestureTimeout
+//    {
+//        get { return m_gestureTimeout; }
+//        set { m_gestureTimeout = value; }
+//    }
+
+
+//    public bool gestureInProgress;
+
+
+
+//    /// <summary>
+//    /// The list of relevant gesture objects for the gesture.
+//    /// </summary>
+//    [Tooltip("The list of relevant objects that are to be tracked for the gesture.")]
+//    [SerializeField] private List<XRGestureObject> m_relevantGestureObjects;
+//    public List<XRGestureObject> RelevantGestureObjects
+//    {
+//        get { return m_relevantGestureObjects; }
+//        set { m_relevantGestureObjects = value; }
+//    }
+
 
-    /// <summary>
-    /// The observation object used for detection.
-    /// </summary>
-    [Tooltip("the gestures start position.")]
-    [SerializeField] private GameObject m_observationObject;
-    /// <summary>
-    /// Gets or sets the observation object.
-    /// </summary>
-    /// <value>The observation object of the gesture.</value>
-    public GameObject ObservationObject
-    {
-        get { return m_observationObject; }
-        set { m_observationObject = value; }
-    }
-
-
-    /// <summary>
-    /// The current index location.
-    /// </summary>
-    [Tooltip("The current index value.")]
-    [SerializeField] private int currentIndexLocation;
-    /// <summary>
-    /// Gets or sets the current index location.
-    /// </summary>
-    /// <value>The current index location.</value>
-    public int CurrentIndexLocation
-    {
-        get { return currentIndexLocation; }
-        set { currentIndexLocation = value; }
-    }
-
-
-    /// <summary>
-    /// The input trigger type for the gesture.
-    /// </summary>
-    [Tooltip("The input trigger type for the gesture.")]
-    [SerializeField] private GestureInputTriggerType m_GestureInputType;
-    /// <summary>
-    /// Gets or sets the input trigger type for the gesture.
-    /// </summary>
-    public GestureInputTriggerType GestureInputType
-    {
-        get { return m_GestureInputType; }
-        set { m_GestureInputType = value; }
-    }
-
-
-    //ya know waht, we can add rotational gestures in later as an extension. i give up :/
-
-    /// <summary>
-    /// the ordered collection of the detection flags used for a gesture.
-    /// </summary>
-    [Tooltip("the ordered collection of the detection flags.")]
-    [SerializeField] private List<detectionColliderData> m_detectionColliderData;
-    public List<detectionColliderData> DetectionColliderData
-    {
-        get { return m_detectionColliderData; }
-        set { m_detectionColliderData = value; }
-    }
-}
-
-
-/// <summary>
-/// Represents the initialization information for detection colliders.
-/// </summary>
-[System.Serializable]
-public struct detectionColliderData
-{
-    /// <summary>
-    /// The game object of the collider.
-    /// </summary>
-    public GameObject colliderGameobject;
-
-
-    /// <summary>
-    /// The number in the series of this particluar gesture.
-    /// </summary>
-    public int seriesNumber;
-
-    /// <summary>
-    /// Indicates whether the collider has reached the detection point.
-    /// </summary>
-    public bool reachedDetectionPoint;
-
-    /// <summary>
-    /// The transform of the collider object.
-    /// </summary>
-    public Transform colliderObjectTransform;
-
-    /// <summary>
-    /// The position the collider should be placed
-    /// </summary>
-    public Vector3 colliderPlacementPosition;
-
-    /// <summary>
-    /// The collider component of the object.
-    /// </summary>
-    public Collider objectCollider;
-
-    /// <summary>
-    /// The detection shape settings for the gesture.
-    /// </summary>
-    [SerializeField] private DetectionShapeSettings m_detectionShapeInfo;
-    /// <summary>
-    /// Gets or sets the detection shape settings.
-    /// </summary>
-    [Tooltip("The detection shape settings for the gesture.")]
-    public DetectionShapeSettings DetectionShapeInfo
-    {
-        get { return m_detectionShapeInfo; }
-        set { m_detectionShapeInfo = value; }
-    }
-}
-
-
-/// <summary>
-/// Represents the data about an object tracked for an XR gesture
-/// </summary>
-[System.Serializable]
-public struct XRGestureObject
-{
-    /// <summary>
-    /// The name of the gesture object.
-    /// </summary>
-    [SerializeField] private string m_name;
-
-    /// <summary>
-    /// Gets or sets the name of the gesture object.
-    /// </summary>
-    /// <value>The name of the gesture object.</value>
-    public string Name
-    {
-        get { return m_name; }
-        set { m_name = value; }
-    }
-
-    /// <summary>
-    /// The game object of the gesture object.
-    /// </summary>
-    [SerializeField] private GameObject m_gestureObject;
-
-    /// <summary>
-    /// Gets or sets the game object of the gesture object.
-    /// </summary>
-    /// <value>The game object of the gesture object.</value>
-    public GameObject GestureObject
-    {
-        get { return m_gestureObject; }
-        set { m_gestureObject = value; }
-    }
-
-    /// <summary>
-    /// The placement of the gesture object.
-    /// </summary>
-    [SerializeField] private GesturePlacement m_placement;
-
-    /// <summary>
-    /// Gets or sets the placement of the gesture object.
-    /// </summary>
-    /// <value>The placement of the gesture object.</value>
-    public GesturePlacement Placement
-    {
-        get { return m_placement; }
-        set { m_placement = value; }
-    }
-
-    /// <summary>
-    /// The start action of the gesture object.
-    /// </summary>
-    [SerializeField] private InputActionProperty m_startAction;
-
-    /// <summary>
-    /// Gets or sets the start action of the gesture object.
-    /// </summary>
-    /// <value>The start action of the gesture object.</value>
-    public InputActionProperty StartAction
-    {
-        get { return m_startAction; }
-        set { m_startAction = value; }
-    }
-}
-
-
-/// <summary>
-/// Represents the detection shape settings for a gesture.
-/// </summary>
-[System.Serializable]
-public struct DetectionShapeSettings
-{
-    /// <summary>
-    /// The primitive type for the detection shape.
-    /// </summary>
-    [SerializeField] private PrimitiveType m_primitiveDetectionShape;
-
-    /// <summary>
-    /// Gets or sets the primitive type for the detection shape.
-    /// </summary>
-    public PrimitiveType PrimitiveDetectionShape
-    {
-        get { return m_primitiveDetectionShape; }
-        set { m_primitiveDetectionShape = value; }
-    }
-
-    /// <summary>
-    /// The size of the detection shape.
-    /// </summary>
-    [SerializeField] private float m_primitiveDetectionShapeSize;
-
-    /// <summary>
-    /// Gets or sets the size of the detection shape.
-    /// </summary>
-    public float PrimitiveDetectionShapeSize
-    {
-        get { return m_primitiveDetectionShapeSize; }
-        set { m_primitiveDetectionShapeSize = value; }
-    }
-
-    /// <summary>
-    /// Specifies whether to use a custom scaled size for the detection shape.
-    /// </summary>
-    [SerializeField] private bool m_useScaledSize;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to use a custom scaled size for the detection shape.
-    /// </summary>
-    public bool UseScaledSize
-    {
-        get { return m_useScaledSize; }
-        set { m_useScaledSize = value; }
-    }
-
-    /// <summary>
-    /// The custom scaled size for the detection shape.
-    /// </summary>
-    [SerializeField] private Vector3 m_customScaledSize;
-
-    /// <summary>
-    /// Gets or sets the custom scaled size for the detection shape.
-    /// </summary>
-    public Vector3 CustomScaledSize
-    {
-        get { return m_customScaledSize; }
-        set { m_customScaledSize = value; }
-    }
-}
-
-
-/// <summary>
-/// Represents a timer coroutine associated with an XRGesture.
-/// </summary>
-public struct TimerCoroutine
-{
-    /// <summary>
-    /// The XRGesture associated with this timer coroutine.
-    /// </summary>
-    public XRGesture coroutinesGesture;
-
-    /// <summary>
-    /// The actual coroutine that represents the timer.
-    /// </summary>
-    public Coroutine timerCoroutine;
-
-    ///<summary>
-    /// The gameobject associated with this timer coroutine.
-    ///</summary>
-    public GameObject coroutineGameobject;
-}
-
-#endregion
-
-
-#region enum hellscape
-/// <summary>
-/// Represents the placement options for a gesture.
-/// </summary>
-[System.Serializable]
-public enum GesturePlacement
-{
-    /// <summary>
-    /// The gesture is associated with the left hand.
-    /// </summary>
-    LeftHand,
-
-    /// <summary>
-    /// The gesture is associated with the right hand.
-    /// </summary>
-    RightHand,
-
-    /// <summary>
-    /// The gesture is associated with the head.
-    /// </summary>
-    Head,
-
-    /// <summary>
-    /// The gesture is not associated one of the predefined sides.
-    /// </summary>
-    Other,
-
-    /// <summary>
-    /// the gesture is not associated with any side.
-    /// </summary>
-    None
-}
-
-
-/// <summary>
-/// Represents the input trigger types for a gesture.
-/// </summary>
-[System.Serializable]
-public enum GestureInputTriggerType
-{
-    /// <summary>
-    /// The gesture is triggered by a trigger input.
-    /// </summary>
-    Trigger,
-
-    /// <summary>
-    /// The gesture is triggered by a grip input.
-    /// </summary>
-    Grip,
-
-    /// <summary>
-    /// The gesture is triggered by a button input.
-    /// </summary>
-    Button,
-
-    /// <summary>
-    /// The gesture is triggered by a position input.
-    /// </summary>
-    Position,
-
-    /// <summary>
-    /// The gesture is triggered by a rotation input.
-    /// </summary>
-    Rotation,
-
-    /// <summary>
-    /// The gesture is triggered by other input types.
-    /// </summary>
-    Other
-}
-
-
-#endregion
-#endregion
+//    /// <summary>
+//    /// The observation object used for detection.
+//    /// </summary>
+//    [Tooltip("the gestures start position.")]
+//    [SerializeField] private GameObject m_observationObject;
+//    /// <summary>
+//    /// Gets or sets the observation object.
+//    /// </summary>
+//    /// <value>The observation object of the gesture.</value>
+//    public GameObject ObservationObject
+//    {
+//        get { return m_observationObject; }
+//        set { m_observationObject = value; }
+//    }
+
+
+//    /// <summary>
+//    /// The current index location.
+//    /// </summary>
+//    [Tooltip("The current index value.")]
+//    [SerializeField] private int currentIndexLocation;
+//    /// <summary>
+//    /// Gets or sets the current index location.
+//    /// </summary>
+//    /// <value>The current index location.</value>
+//    public int CurrentIndexLocation
+//    {
+//        get { return currentIndexLocation; }
+//        set { currentIndexLocation = value; }
+//    }
+
+
+//    /// <summary>
+//    /// The input trigger type for the gesture.
+//    /// </summary>
+//    [Tooltip("The input trigger type for the gesture.")]
+//    [SerializeField] private GestureInputTriggerType m_GestureInputType;
+//    /// <summary>
+//    /// Gets or sets the input trigger type for the gesture.
+//    /// </summary>
+//    public GestureInputTriggerType GestureInputType
+//    {
+//        get { return m_GestureInputType; }
+//        set { m_GestureInputType = value; }
+//    }
+
+
+//    //ya know waht, we can add rotational gestures in later as an extension. i give up :/
+
+//    /// <summary>
+//    /// the ordered collection of the detection flags used for a gesture.
+//    /// </summary>
+//    [Tooltip("the ordered collection of the detection flags.")]
+//    [SerializeField] private List<detectionColliderData> m_detectionColliderData;
+//    public List<detectionColliderData> DetectionColliderData
+//    {
+//        get { return m_detectionColliderData; }
+//        set { m_detectionColliderData = value; }
+//    }
+//}
+
+
+///// <summary>
+///// Represents the initialization information for detection colliders.
+///// </summary>
+//[System.Serializable]
+//public struct detectionColliderData
+//{
+//    /// <summary>
+//    /// The game object of the collider.
+//    /// </summary>
+//    public GameObject colliderGameobject;
+
+
+//    /// <summary>
+//    /// The number in the series of this particluar gesture.
+//    /// </summary>
+//    public int seriesNumber;
+
+//    /// <summary>
+//    /// Indicates whether the collider has reached the detection point.
+//    /// </summary>
+//    public bool reachedDetectionPoint;
+
+//    /// <summary>
+//    /// The transform of the collider object.
+//    /// </summary>
+//    public Transform colliderObjectTransform;
+
+//    /// <summary>
+//    /// The position the collider should be placed
+//    /// </summary>
+//    public Vector3 colliderPlacementPosition;
+
+//    /// <summary>
+//    /// The collider component of the object.
+//    /// </summary>
+//    public Collider objectCollider;
+
+//    /// <summary>
+//    /// The detection shape settings for the gesture.
+//    /// </summary>
+//    [SerializeField] private DetectionShapeSettings m_detectionShapeInfo;
+//    /// <summary>
+//    /// Gets or sets the detection shape settings.
+//    /// </summary>
+//    [Tooltip("The detection shape settings for the gesture.")]
+//    public DetectionShapeSettings DetectionShapeInfo
+//    {
+//        get { return m_detectionShapeInfo; }
+//        set { m_detectionShapeInfo = value; }
+//    }
+//}
+
+
+///// <summary>
+///// Represents the data about an object tracked for an XR gesture
+///// </summary>
+//[System.Serializable]
+//public struct XRGestureObject
+//{
+//    /// <summary>
+//    /// The name of the gesture object.
+//    /// </summary>
+//    [SerializeField] private string m_name;
+
+//    /// <summary>
+//    /// Gets or sets the name of the gesture object.
+//    /// </summary>
+//    /// <value>The name of the gesture object.</value>
+//    public string Name
+//    {
+//        get { return m_name; }
+//        set { m_name = value; }
+//    }
+
+//    /// <summary>
+//    /// The game object of the gesture object.
+//    /// </summary>
+//    [SerializeField] private GameObject m_gestureObject;
+
+//    /// <summary>
+//    /// Gets or sets the game object of the gesture object.
+//    /// </summary>
+//    /// <value>The game object of the gesture object.</value>
+//    public GameObject GestureObject
+//    {
+//        get { return m_gestureObject; }
+//        set { m_gestureObject = value; }
+//    }
+
+//    /// <summary>
+//    /// The placement of the gesture object.
+//    /// </summary>
+//    [SerializeField] private GesturePlacement m_placement;
+
+//    /// <summary>
+//    /// Gets or sets the placement of the gesture object.
+//    /// </summary>
+//    /// <value>The placement of the gesture object.</value>
+//    public GesturePlacement Placement
+//    {
+//        get { return m_placement; }
+//        set { m_placement = value; }
+//    }
+
+//    /// <summary>
+//    /// The start action of the gesture object.
+//    /// </summary>
+//    [SerializeField] private InputActionProperty m_startAction;
+
+//    /// <summary>
+//    /// Gets or sets the start action of the gesture object.
+//    /// </summary>
+//    /// <value>The start action of the gesture object.</value>
+//    public InputActionProperty StartAction
+//    {
+//        get { return m_startAction; }
+//        set { m_startAction = value; }
+//    }
+//}
+
+
+///// <summary>
+///// Represents the detection shape settings for a gesture.
+///// </summary>
+//[System.Serializable]
+//public struct DetectionShapeSettings
+//{
+//    /// <summary>
+//    /// The primitive type for the detection shape.
+//    /// </summary>
+//    [SerializeField] private PrimitiveType m_primitiveDetectionShape;
+
+//    /// <summary>
+//    /// Gets or sets the primitive type for the detection shape.
+//    /// </summary>
+//    public PrimitiveType PrimitiveDetectionShape
+//    {
+//        get { return m_primitiveDetectionShape; }
+//        set { m_primitiveDetectionShape = value; }
+//    }
+
+//    /// <summary>
+//    /// The size of the detection shape.
+//    /// </summary>
+//    [SerializeField] private float m_primitiveDetectionShapeSize;
+
+//    /// <summary>
+//    /// Gets or sets the size of the detection shape.
+//    /// </summary>
+//    public float PrimitiveDetectionShapeSize
+//    {
+//        get { return m_primitiveDetectionShapeSize; }
+//        set { m_primitiveDetectionShapeSize = value; }
+//    }
+
+//    /// <summary>
+//    /// Specifies whether to use a custom scaled size for the detection shape.
+//    /// </summary>
+//    [SerializeField] private bool m_useScaledSize;
+
+//    /// <summary>
+//    /// Gets or sets a value indicating whether to use a custom scaled size for the detection shape.
+//    /// </summary>
+//    public bool UseScaledSize
+//    {
+//        get { return m_useScaledSize; }
+//        set { m_useScaledSize = value; }
+//    }
+
+//    /// <summary>
+//    /// The custom scaled size for the detection shape.
+//    /// </summary>
+//    [SerializeField] private Vector3 m_customScaledSize;
+
+//    /// <summary>
+//    /// Gets or sets the custom scaled size for the detection shape.
+//    /// </summary>
+//    public Vector3 CustomScaledSize
+//    {
+//        get { return m_customScaledSize; }
+//        set { m_customScaledSize = value; }
+//    }
+//}
+
+
+///// <summary>
+///// Represents a timer coroutine associated with an XRGesture.
+///// </summary>
+//public struct TimerCoroutine
+//{
+//    /// <summary>
+//    /// The XRGesture associated with this timer coroutine.
+//    /// </summary>
+//    public XRGesture coroutinesGesture;
+
+//    /// <summary>
+//    /// The actual coroutine that represents the timer.
+//    /// </summary>
+//    public Coroutine timerCoroutine;
+
+//    ///<summary>
+//    /// The gameobject associated with this timer coroutine.
+//    ///</summary>
+//    public GameObject coroutineGameobject;
+//}
+
+//#endregion
+
+
+//#region enum hellscape
+///// <summary>
+///// Represents the placement options for a gesture.
+///// </summary>
+//[System.Serializable]
+//public enum GesturePlacement
+//{
+//    /// <summary>
+//    /// The gesture is associated with the left hand.
+//    /// </summary>
+//    LeftHand,
+
+//    /// <summary>
+//    /// The gesture is associated with the right hand.
+//    /// </summary>
+//    RightHand,
+
+//    /// <summary>
+//    /// The gesture is associated with the head.
+//    /// </summary>
+//    Head,
+
+//    /// <summary>
+//    /// The gesture is not associated one of the predefined sides.
+//    /// </summary>
+//    Other,
+
+//    /// <summary>
+//    /// the gesture is not associated with any side.
+//    /// </summary>
+//    None
+//}
+
+
+///// <summary>
+///// Represents the input trigger types for a gesture.
+///// </summary>
+//[System.Serializable]
+//public enum GestureInputTriggerType
+//{
+//    /// <summary>
+//    /// The gesture is triggered by a trigger input.
+//    /// </summary>
+//    Trigger,
+
+//    /// <summary>
+//    /// The gesture is triggered by a grip input.
+//    /// </summary>
+//    Grip,
+
+//    /// <summary>
+//    /// The gesture is triggered by a button input.
+//    /// </summary>
+//    Button,
+
+//    /// <summary>
+//    /// The gesture is triggered by a position input.
+//    /// </summary>
+//    Position,
+
+//    /// <summary>
+//    /// The gesture is triggered by a rotation input.
+//    /// </summary>
+//    Rotation,
+
+//    /// <summary>
+//    /// The gesture is triggered by other input types.
+//    /// </summary>
+//    Other
+//}
+
+
+//#endregion
+//#endregion
 
 
 #region Notes

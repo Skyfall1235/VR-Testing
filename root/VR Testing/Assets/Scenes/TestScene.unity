@@ -4926,8 +4926,6 @@ MonoBehaviour:
   m_XRGestures:
   - m_gestureName: test 1
     _gestureEnabled: 0
-    m_requirePlacement: 0
-    m_gesturePlacement: 0
     m_gestureTimeout: 22
     gestureInProgress: 0
     m_relevantGestureObjects: []
@@ -5004,7 +5002,6 @@ MonoBehaviour:
   m_trackedGestureObjects:
   - m_name: 
     m_gestureObject: {fileID: 0}
-    m_placement: 0
     m_startAction:
       m_UseReference: 0
       m_Action:
@@ -7462,8 +7459,6 @@ MonoBehaviour:
   m_XRGestures:
   - m_gestureName: 
     _gestureEnabled: 0
-    m_requirePlacement: 0
-    m_gesturePlacement: 0
     m_gestureTimeout: 0
     gestureInProgress: 0
     m_relevantGestureObjects: []
@@ -7474,7 +7469,6 @@ MonoBehaviour:
   m_trackedGestureObjects:
   - m_name: 
     m_gestureObject: {fileID: 0}
-    m_placement: 0
     m_startAction:
       m_UseReference: 0
       m_Action:
@@ -15466,6 +15460,186 @@ Transform:
   - {fileID: 1620450104}
   m_Father: {fileID: 0}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1739228830
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1739228835}
+  - component: {fileID: 1739228834}
+  - component: {fileID: 1739228833}
+  - component: {fileID: 1739228832}
+  - component: {fileID: 1739228831}
+  m_Layer: 0
+  m_Name: Test object
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1739228831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739228830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cefeb7da7487484dae7dace97e74e7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_interactionDetermineCollider: {fileID: 0}
+  pinchAnimationAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Pinch Animation
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 1aed659f-4d77-4b45-bc6a-c90e6d2b0f65
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  gripAnimationAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Grip Animation
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: b7fa02fd-4794-4e77-9479-f2d35c07240f
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  m_GestureInputType: 0
+  m_selectedGestureStyle: 0
+  m_observationObject: {fileID: 0}
+  m_detectionShapeInfo:
+    m_primitiveDetectionShape: 0
+    m_primitiveDetectionShapeSize: 0
+    m_useScaledSize: 0
+    m_customScaledSize: {x: 0, y: 0, z: 0}
+--- !u!114 &1739228832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739228830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b30eedf21015e1449ed8e6901ae8a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_gestureRecognitionEnabled: 0
+  m_gestureTimeoutThreshold: 0
+  m_shoulderWidth: 0.3
+  m_activationBoxCollider: {fileID: 0}
+  m_XRGestures:
+  - m_gestureName: 
+    _gestureEnabled: 0
+    m_gestureTimeout: 0
+    gestureInProgress: 0
+    m_relevantGestureObjects: []
+    m_observationObject: {fileID: 0}
+    currentIndexLocation: 0
+    m_GestureInputType: 0
+    m_detectionColliderData:
+    - colliderGameobject: {fileID: 0}
+      seriesNumber: 0
+      reachedDetectionPoint: 0
+      colliderObjectTransform: {fileID: 0}
+      colliderPlacementPosition: {x: 0, y: 0, z: 0}
+      objectCollider: {fileID: 0}
+      m_detectionShapeInfo:
+        m_primitiveDetectionShape: 0
+        m_primitiveDetectionShapeSize: 0
+        m_useScaledSize: 0
+        m_customScaledSize: {x: 0, y: 0, z: 0}
+    - colliderGameobject: {fileID: 0}
+      seriesNumber: 0
+      reachedDetectionPoint: 0
+      colliderObjectTransform: {fileID: 0}
+      colliderPlacementPosition: {x: 0, y: 0, z: 0}
+      objectCollider: {fileID: 0}
+      m_detectionShapeInfo:
+        m_primitiveDetectionShape: 0
+        m_primitiveDetectionShapeSize: 0
+        m_useScaledSize: 0
+        m_customScaledSize: {x: 0, y: 0, z: 0}
+  m_trackedGestureObjects:
+  - m_name: 
+    m_gestureObject: {fileID: 0}
+    m_startAction:
+      m_UseReference: 0
+      m_Action:
+        m_Name: Start
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 1e9570ca-6f4e-4f0b-a91b-f1ea7797b344
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 0}
+--- !u!65 &1739228833
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739228830}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1739228834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739228830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b68bf5b13d1bdc459f889748d8549ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_gestureRecognitionEnabled: 0
+  m_gestureTimeoutThreshold: 0
+  m_XRGestures: []
+  m_trackedGestureObjects: []
+--- !u!4 &1739228835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739228830}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.421227, y: 0.90128875, z: 2.8350792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1749757405
 GameObject:
