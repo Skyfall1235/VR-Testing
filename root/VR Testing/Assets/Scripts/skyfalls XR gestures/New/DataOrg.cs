@@ -66,22 +66,6 @@ public struct XRGesture
 
 
     /// <summary>
-    /// The observation object used for detection.
-    /// </summary>
-    [Tooltip("the gestures start position.")]
-    [SerializeField] private GameObject m_observationObject;
-    /// <summary>
-    /// Gets or sets the observation object.
-    /// </summary>
-    /// <value>The observation object of the gesture.</value>
-    public GameObject ObservationObject
-    {
-        get { return m_observationObject; }
-        set { m_observationObject = value; }
-    }
-
-
-    /// <summary>
     /// The current index location.
     /// </summary>
     [Tooltip("The current index value.")]
@@ -124,6 +108,7 @@ public struct XRGesture
         get { return m_detectionColliderData; }
         set { m_detectionColliderData = value; }
     }
+
 }
 
 
@@ -134,34 +119,27 @@ public struct XRGesture
 public struct detectionColliderData
 {
     /// <summary>
-    /// The game object of the collider.
-    /// </summary>
-    public GameObject colliderGameobject;
-
-
-    /// <summary>
     /// The number in the series of this particluar gesture.
     /// </summary>
     public int seriesNumber;
+
+    /// <summary>
+    /// The game object of the collider.
+    /// </summary>
+    public GameObject colliderGameobject;
 
     /// <summary>
     /// Indicates whether the collider has reached the detection point.
     /// </summary>
     public bool reachedDetectionPoint;
 
-    /// <summary>
-    /// The detection shape settings for the gesture.
-    /// </summary>
-    [SerializeField] private DetectionShapeSettings m_detectionShapeInfo;
-    /// <summary>
-    /// Gets or sets the detection shape settings.
-    /// </summary>
-    [Tooltip("The detection shape settings for the gesture.")]
-    public DetectionShapeSettings DetectionShapeInfo
-    {
-        get { return m_detectionShapeInfo; }
-        set { m_detectionShapeInfo = value; }
-    }
+
+    //TEMP : if not using custom collider, use basic collider
+    public bool useCustomCollider;
+    public Collider customCollider;
+
+    public DetectionShapeSettings basicCollider;
+
 }
 
 

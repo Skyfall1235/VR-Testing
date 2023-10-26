@@ -116,14 +116,14 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
             for (int j = 0; j < gesture.DetectionColliderData.Count; j++)
             {
                 detectionColliderData data = gesture.DetectionColliderData[j];
-                GameObject modifiedObject = DetectionColliderSetup(data.DetectionShapeInfo, gesture, j);
+                //GameObject modifiedObject = DetectionColliderSetup(data.DetectionShapeInfo, gesture, j);
 
                 // Store the modified object and related data
-                data.colliderGameobject = modifiedObject;
+                //data.colliderGameobject = modifiedObject;
                 data.seriesNumber = j;
                 //data.colliderObjectTransform = modifiedObject.GetComponent<Transform>();
                 //data.objectCollider = modifiedObject.GetComponent<Collider>();
-                data.DetectionShapeInfo = data.DetectionShapeInfo;
+                //data.DetectionShapeInfo = data.DetectionShapeInfo;
 
                 // Save the updated data back into the gesture
                 gesture.DetectionColliderData[j] = data;
@@ -195,22 +195,22 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     private GameObject SetupDetectionColliderScaling(GameObject primitiveObject, XRGesture gesture, int itemIndex)
     {
         // Get the relevant detection shape settings
-        DetectionShapeSettings relevantSettingData = gesture.DetectionColliderData[itemIndex].DetectionShapeInfo;
+        //DetectionShapeSettings relevantSettingData = gesture.DetectionColliderData[itemIndex].DetectionShapeInfo;
 
         // Create a scaled object based on the primitive object
         GameObject scaledObject = primitiveObject;
 
         // Set up the size
-        if (!relevantSettingData.UseScaledSize)
-        {
-            // Set the scale using the primitive shape size
-            scaledObject.transform.localScale = new Vector3(relevantSettingData.PrimitiveDetectionShapeSize, relevantSettingData.PrimitiveDetectionShapeSize, relevantSettingData.PrimitiveDetectionShapeSize);
-        }
-        else
-        {
-            // Set the local scale using the custom scaled size
-            scaledObject.transform.localScale = relevantSettingData.CustomScaledSize;
-        }
+        //if (!relevantSettingData.UseScaledSize)
+        //{
+        //    // Set the scale using the primitive shape size
+        //    scaledObject.transform.localScale = new Vector3(relevantSettingData.PrimitiveDetectionShapeSize, relevantSettingData.PrimitiveDetectionShapeSize, relevantSettingData.PrimitiveDetectionShapeSize);
+        //}
+        //else
+        //{
+        //    // Set the local scale using the custom scaled size
+        //    scaledObject.transform.localScale = relevantSettingData.CustomScaledSize;
+        //}
 
         // Return the scaled object
         return scaledObject;
@@ -236,7 +236,7 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
         {
             reporter.IsObservationObject = true;
             CreateInstanceOfTimer(detectorObject, this, gesture);
-            gesture.ObservationObject = detectorObject;
+            //gesture.ObservationObject = detectorObject;
         }
 
         // Fills the reporter's variables with the relevant information
