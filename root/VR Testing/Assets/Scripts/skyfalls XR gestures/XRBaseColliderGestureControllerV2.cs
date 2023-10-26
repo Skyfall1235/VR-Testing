@@ -63,7 +63,7 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
     }
     private void Update()
     {
-        SetUpDetectionObjects();
+        //SetUpDetectionObjects();
     }
     private void FixedUpdate()
     {
