@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.Events;
 /// <summary>
 /// Represents a gesture in XR.
 /// </summary>
@@ -80,7 +81,6 @@ public struct XRGesture
         set { currentIndexLocation = value; }
     }
 
-
     /// <summary>
     /// The input trigger type for the gesture.
     /// </summary>
@@ -95,9 +95,6 @@ public struct XRGesture
         set { m_GestureInputType = value; }
     }
 
-
-    //ya know waht, we can add rotational gestures in later as an extension. i give up :/
-
     /// <summary>
     /// the ordered collection of the detection flags used for a gesture.
     /// </summary>
@@ -109,6 +106,7 @@ public struct XRGesture
         set { m_detectionColliderData = value; }
     }
 
+    public UnityEvent<string> OnGestureEnd;
 }
 
 
@@ -195,7 +193,6 @@ public struct XRGestureObject
     }
 }
 
-
 /// <summary>
 /// Represents the detection shape settings for a gesture.
 /// </summary>
@@ -261,11 +258,7 @@ public struct DetectionShapeSettings
 
 
 #endregion
-
-
 #region enums
-
-
 /// <summary>
 /// Represents the input trigger types for a gesture.
 /// </summary>
@@ -302,8 +295,6 @@ public enum GestureInputTriggerType
     /// </summary>
     Other
 }
-
-
 #endregion
 #endregion
 

@@ -44,6 +44,9 @@ public class XRBaseColliderGestureControllerV3 : MonoBehaviour
     [Tooltip("Enable this to allow users to interact with objects and perform actions using gestures.")]
     [SerializeField] private bool m_gestureRecognitionEnabled;
 
+    //TEMP?
+    [SerializeField] private bool m_allowMultipleGestures;
+
     /// <summary>
     /// The gesture settings that are used by the gesture recognition system.
     /// </summary>
@@ -81,7 +84,12 @@ public class XRBaseColliderGestureControllerV3 : MonoBehaviour
 
     public XRGesture currentGesture;
 
-    public void StartGesture(XRGesture gesture)
+    public virtual void StartGesture(XRGesture gesture)
+    {
+        //check for the multiuse gesture bool, then check the individual gesture
+    }
+
+    public virtual void IncrementGestureIndex(XRGesture gesture)
     {
 
     }

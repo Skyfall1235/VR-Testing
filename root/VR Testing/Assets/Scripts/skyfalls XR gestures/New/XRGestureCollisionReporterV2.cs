@@ -65,8 +65,6 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
         }
     }
 
-    
-
     /// <summary>
     /// The tracked gesture objects.
     /// </summary>
@@ -101,11 +99,6 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
     public virtual void TriggerEvent()
     {
         OnTriggerEvent.Invoke();
-    }
-
-    private void CheckCurrentSeriesNumber()
-    {
-
     }
 
     private bool DetermineObjectCollision(Collider otherObject, out XRGestureObject gestureData)
