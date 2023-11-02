@@ -73,13 +73,13 @@ public class XRBaseColliderGestureControllerV3 : MonoBehaviour
     /// A list of all custom gestures that are supported by the gesture recognition system.
     /// </summary>
     [Tooltip("Add new gestures to this list to allow users to interact with objects and perform actions using custom gestures.")]
-    [SerializeField] private List<XRGesture> m_XRGestures = new(); //the list of each custom gesture
+    [SerializeField] private List<XRGesture> m_XRGestures; //the list of each custom gesture
 
     /// <summary>
     /// A list of all objects that are being tracked for gestures.
     /// </summary>
     [Tooltip("Add objects to this list to allow users to interact with them using gestures.")]
-    [SerializeField] public List<XRGestureObject> m_trackedGestureObjects = new(); // what objects are to be tracked for which gesture
+    [SerializeField] public List<XRGestureObject> m_trackedGestureObjects; // what objects are to be tracked for which gesture
     #endregion
 
     public XRGesture currentGesture;
