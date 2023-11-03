@@ -36,40 +36,16 @@ using UnityEngine.Events;
 
 public class XRGestureCollisionReporterV2 : MonoBehaviour
 {
-    public int seriesNumber;
-
-    /// <summary>
-    /// The associated controller for the gesture.
-    /// </summary>
-    [SerializeField]
-    private XRBaseColliderGestureControllerV2 m_associatedController;
-
-    /// <summary>
-    /// This bool is responsible for locking the other variables after they have been set.
-    /// </summary>
-    /// <remarks>
-    /// these variables are reference variables and should only ever refer to thieir predesigned components. if they need to be changed, their can change from the controller or a sub class of it.
-    /// If the values above need to be changed, this value has to be set to False first.
-    /// </remarks>
-    [HideInInspector] bool m_lockFields = false;
-    public bool LockFields
+    public XRGestureCollisionReporterV2(List<XRGestureObject> trackedObjects, UnityEvent triggerEvent)
     {
-        get { return m_lockFields; }
-        set
-        {
-            // Only allow modification from within the XRGestureController script
-            if (ReferenceEquals(value, m_associatedController))
-            {
-                m_lockFields = value;
-            }
-        }
+        TrackedGestureObjects = trackedObjects;
+        OnTriggerEvent = triggerEvent;
     }
 
     /// <summary>
     /// The tracked gesture objects.
     /// </summary>
-    [SerializeField]
-    private List<XRGestureObject> m_trackedGestureObjects;
+    [SerializeField] private List<XRGestureObject> m_trackedGestureObjects;
 
     /// <summary>
     /// Gets or sets the tracked gesture objects.
@@ -77,31 +53,18 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
     public List<XRGestureObject> TrackedGestureObjects
     {
         get { return m_trackedGestureObjects; }
-        set
-        {
-            if (!LockFields)
-            {
-                m_trackedGestureObjects = value;
-            }
-        }
+        set { m_trackedGestureObjects = value; }
     }
 
-    public Collider reporterCollider;
-
-    [SerializeField] private UnityEvent OnTriggerEvent = new UnityEvent();
-
-
-    public void Setup()
-    {
-
-    }
+    public UnityEvent OnTriggerEvent = new UnityEvent();
 
     public virtual void TriggerEvent()
     {
         OnTriggerEvent.Invoke();
     }
 
-    private bool DetermineObjectCollision(Collider otherObject, out XRGestureObject gestureData)
+    [BurstCompile]
+    private bool DetermineObjectCollision(Collider otherObject)
     {
         List<XRGestureObject> trackedObjects = m_trackedGestureObjects;
 
@@ -109,19 +72,19 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
         {
             if(otherObject.Equals(obj))
             {
-                gestureData = obj;
                 return true;
             }
         }
-        gestureData = new XRGestureObject();
         return false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
+        //if its on, its able to be interacted with.
         
-        //first determine if its in series, then if its good, check the object. if thats also good, report back to the manager.
+        // check the collision to make sure its the tracked object.
+
+        //if it is, iterate the gesture, turn itself off,
         //run unity job only after youve confirmed the object is needed.
 
         //job consists of starting the manager to shift the next item over, starting the managers toggle to show the current and next colliders.

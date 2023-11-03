@@ -4,11 +4,12 @@ using UnityEngine;
 using Unity.Burst;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
+using UnityEditor;
 
 //lOCATE UNFINISHED WORK BY LOOKING THESE
 //NOT FINISHED
 //TEMP
-
 /// <summary>
 /// Represents a gesture in XR.
 /// </summary>
@@ -55,10 +56,7 @@ public class XRGesture : MonoBehaviour
 
 
     [Space(12)]
-    [Header("Gesture Objects")]
-    [Tooltip("Have the gestures colliders be compiled in advance?")]
-    [SerializeField] private bool m_compiledGestures; //NOT FINISHED
-
+    [Header("Tracked Gesture Objects")]
     /// <summary>
     /// The current index location.
     /// </summary>
@@ -75,20 +73,6 @@ public class XRGesture : MonoBehaviour
     }
 
     /// <summary>
-    /// The list of relevant gesture objects for the gesture.
-    /// </summary>
-    [Tooltip("The list of relevant objects that are to be tracked for the gesture.")]
-    [SerializeField] private List<XRGestureObject> m_relevantGestureObjects;
-    public List<XRGestureObject> RelevantGestureObjects
-    {
-        get { return m_relevantGestureObjects; }
-        set { m_relevantGestureObjects = value; }
-    }   
-
-
-    [Space(12)]
-    [Header("Gesture Input")]
-    /// <summary>
     /// The input trigger type for the gesture.
     /// </summary>
     [Tooltip("The input trigger type for the gesture.")]
@@ -101,6 +85,23 @@ public class XRGesture : MonoBehaviour
         get { return m_gestureInputType; }
         set { m_gestureInputType = value; }
     }
+
+    /// <summary>
+    /// The list of relevant gesture objects for the gesture.
+    /// </summary>
+    [Tooltip("The list of relevant objects that are to be tracked for the gesture.")]
+    [SerializeField] private List<XRGestureObject> m_relevantGestureObjects;
+    public List<XRGestureObject> RelevantGestureObjects
+    {
+        get { return m_relevantGestureObjects; }
+        set { m_relevantGestureObjects = value; }
+    }   
+
+
+    [Space(12)]
+    [Header("Gesture Colliders")]
+    [Tooltip("Have the gestures colliders be compiled in advance?")]
+    [SerializeField] private bool m_compileGestures = false; //NOT FINISHED
 
     /// <summary>
     /// the ordered collection of the detection flags used for a gesture.
@@ -121,10 +122,17 @@ public class XRGesture : MonoBehaviour
     public UnityEvent OnGestureEndEvent = new();
     #endregion
 
-
+    private void OnValidate()
+    {
+        if(m_compileGestures)
+        {
+            CompileChildrenColliders();
+        }
+    }
     //we need to run this at runtime, or at least have it precalculated.
-    private void CompileChildrenToList()
+    private void CompileChildrenColliders()
     {
 
     }
+    
 }

@@ -42,10 +42,10 @@ public class XRBaseColliderGestureControllerV3 : MonoBehaviour
     /// Determines whether gesture recognition is enabled.
     /// </summary>
     [Tooltip("Enable this to allow users to interact with objects and perform actions using gestures.")]
-    [SerializeField] private bool m_gestureRecognitionEnabled;
+    [SerializeField] private bool m_gestureRecognitionEnabled = true;
 
     //TEMP?
-    [SerializeField] private bool m_allowMultipleGestures;
+    [SerializeField] private bool m_allowSimultaneousGestures = false;
 
     /// <summary>
     /// The gesture settings that are used by the gesture recognition system.
@@ -82,7 +82,7 @@ public class XRBaseColliderGestureControllerV3 : MonoBehaviour
     [SerializeField] public List<XRGestureObject> m_trackedGestureObjects; // what objects are to be tracked for which gesture
     #endregion
 
-    public XRGesture currentGesture;
+    public List<XRGesture> m_currentGesture;
 
     public virtual void StartGesture(XRGesture gesture)
     {
