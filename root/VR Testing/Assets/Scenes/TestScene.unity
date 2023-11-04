@@ -33774,8 +33774,38 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3822919913169006272, guid: 3847622614ebb5d41bff9f32e0e9d64d,
         type: 3}
+      propertyPath: OnGestureCollideEvent.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3822919913169006272, guid: 3847622614ebb5d41bff9f32e0e9d64d,
+        type: 3}
       propertyPath: m_detectionColliderData.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3822919913169006272, guid: 3847622614ebb5d41bff9f32e0e9d64d,
+        type: 3}
+      propertyPath: m_relevantGestureObjects.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3822919913169006272, guid: 3847622614ebb5d41bff9f32e0e9d64d,
+        type: 3}
+      propertyPath: OnGestureEndEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3822919913169006272, guid: 3847622614ebb5d41bff9f32e0e9d64d,
+        type: 3}
+      propertyPath: OnGestureStartEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3822919913169006272, guid: 3847622614ebb5d41bff9f32e0e9d64d,
+        type: 3}
+      propertyPath: OnGestureCollideEvent.Array.data[0].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3822919913169006272, guid: 3847622614ebb5d41bff9f32e0e9d64d,
+        type: 3}
+      propertyPath: OnGestureCollideEvent.Array.data[1].m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3822919913169006273, guid: 3847622614ebb5d41bff9f32e0e9d64d,
         type: 3}
@@ -33840,8 +33870,32 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3822919913169006273, guid: 3847622614ebb5d41bff9f32e0e9d64d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3822919913128089711}
   m_SourcePrefab: {fileID: 100100000, guid: 3847622614ebb5d41bff9f32e0e9d64d, type: 3}
+--- !u!1 &3822919913128089710 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3822919913169006273, guid: 3847622614ebb5d41bff9f32e0e9d64d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3822919913128089709}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3822919913128089711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3822919913128089710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8394c91c2dd2364c8fa6b6869b7bd21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_associatedController: {fileID: 0}
+  m_associatedGesture: {fileID: 0}
 --- !u!1001 &4052741549089553518
 PrefabInstance:
   m_ObjectHideFlags: 0
