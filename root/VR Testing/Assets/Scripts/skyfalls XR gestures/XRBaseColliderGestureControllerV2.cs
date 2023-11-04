@@ -261,7 +261,7 @@ public class XRBaseColliderGestureControllerV2 : MonoBehaviour
         // Add the XRGestureTimeControl component to the GameObject.
         XRGestureTimeControl timeControlScript = ObservationGameobject.AddComponent<XRGestureTimeControl>();
         // Initialize the XRGestureTimeControl component with the associatedController and associatedGesture.
-        timeControlScript.AssociatedController = associatedController;
+        //timeControlScript.AssociatedController = associatedController;
         timeControlScript.AssociatedGesture = associatedGesture;
         // Return the created XRGestureTimeControl instance.
     }

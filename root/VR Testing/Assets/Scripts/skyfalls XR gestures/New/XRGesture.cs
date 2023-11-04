@@ -4,7 +4,6 @@ using UnityEngine;
 using Unity.Burst;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using Unity.VisualScripting;
 using UnityEditor;
 
 //lOCATE UNFINISHED WORK BY LOOKING THESE
@@ -53,24 +52,11 @@ public class XRGesture : MonoBehaviour
     }
 
     public bool gestureInProgress;// will need to communicate this back to the manager
+    public XRGestureTimeControl timeController;//TEMP
 
 
     [Space(12)]
     [Header("Tracked Gesture Objects")]
-    /// <summary>
-    /// The current index location.
-    /// </summary>
-    [Tooltip("The current index value.")]
-    [SerializeField] private int m_currentIndexLocation;
-    /// <summary>
-    /// Gets or sets the current index location.
-    /// </summary>
-    /// <value>The current index location.</value>
-    public int CurrentIndexLocation
-    {
-        get { return m_currentIndexLocation; }
-        set { m_currentIndexLocation = value; }
-    }
 
     /// <summary>
     /// The input trigger type for the gesture.
@@ -104,6 +90,21 @@ public class XRGesture : MonoBehaviour
     [SerializeField] private bool m_compileGestures = false; //NOT FINISHED
 
     /// <summary>
+    /// The current index location.
+    /// </summary>
+    [Tooltip("The current index value.")]
+    [SerializeField] private int m_currentIndexLocation;
+    /// <summary>
+    /// Gets or sets the current index location.
+    /// </summary>
+    /// <value>The current index location.</value>
+    public int CurrentIndexLocation
+    {
+        get { return m_currentIndexLocation; }
+        set { m_currentIndexLocation = value; }
+    }
+
+    /// <summary>
     /// the ordered collection of the detection flags used for a gesture.
     /// </summary>
     [Tooltip("the ordered collection of the detection flags.")]
@@ -118,8 +119,9 @@ public class XRGesture : MonoBehaviour
     [Space(12)]
     [Header("Gesture Events")]
     public UnityEvent OnGestureStartEvent = new();
-    public List<UnityEvent> OnGestureCollideEvent = new();
+    public List<UnityEvent> OnGestureCollideEvent;
     public UnityEvent OnGestureEndEvent = new();
+    public UnityEvent OnGestureCancelEvent = new();
     #endregion
 
     private void OnValidate()
@@ -129,10 +131,28 @@ public class XRGesture : MonoBehaviour
             CompileChildrenColliders();
         }
     }
+
+
+
+
+
+
+
+
+
     //we need to run this at runtime, or at least have it precalculated.
     private void CompileChildrenColliders()
     {
+        //empty the list of colliders and the unity event list, and recompile
 
+
+        CompileColliderEvents();
     }
-    
+
+    private void CompileColliderEvents()
+    {
+        //for each item in the collider list, go through its components and find the Collision Reporter.
+        //grab its unity event, add it to the event list.
+    }
+
 }

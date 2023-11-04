@@ -26,15 +26,14 @@ public class XRGestureTimeControl : MonoBehaviour
         get { return m_associatedGesture.GestureTimeout; }
     }
     #endregion
-    bool gestureTimerIsRunning = false;
-    bool indexerTimerIsRunning = false;
+    Coroutine gestureTimer;
+    Coroutine indexerTimer;
     float CustomTimerSeconds;
 
 
     private void Awake()
     {
         // Calculate the timer duration (CustomTimerSeconds) as the minimum value between m_associatedGestureTimeOut and m_globalTimeOut.
-        CustomTimerSeconds = Mathf.Min(m_associatedGestureTimeOut, m_globalTimeOut);
     }
 
 
@@ -45,40 +44,44 @@ public class XRGestureTimeControl : MonoBehaviour
 
 
     /// <summary>
-    /// Starts a timer coroutine associated with the specified XRGesture.
+    /// 
     /// </summary>
     public void StartGestureTimer()
     {
         // Check if a timer is already running for the selected gesture.
-        if (gestureTimerIsRunning)
+        if (gestureTimer != null)
         {
             Debug.Log($"A timer is already running for gesture {m_associatedGesture.GestureName}");
         }
-        // Start a new timer coroutine for the index timer
-        Coroutine indexerCoroutine = StartCoroutine(CustomTimer(CustomTimerSeconds));
-        //start a new timer for the Gesture as a whole
-        Coroutine GestureCoroutine = StartCoroutine(CustomTimer(m_associatedGesture.GestureTimeout));
-
+        // Start a new timer coroutine for the index timer, using the individuals custom time amount
+        indexerTimer = StartCoroutine(IterationTimer(CustomTimerSeconds));
+        //start a new timer for the Gesture using the gestures timeout, which can be local or global
+        gestureTimer = StartCoroutine(GestureTimer(m_associatedGesture.GestureTimeout));
     }
 
+
     //timer for between gestures
+
+    public void IterateColliderTimer()
+    {
+        StopCoroutine(indexerTimer);
+        //call back to the
+    }
 
     //timer for gesture as a whole
 
 
     
-    public void StopIterationTimer() 
-    {
-        if (indexerTimerIsRunning)
-        {
 
-        }
-    }
     public void StopGestureTimer()
     {
-        if (gestureTimerIsRunning)
+        if (gestureTimer != null)
         {
-            StopCoroutine
+            StopCoroutine(gestureTimer);
+            StopCoroutine(indexerTimer);
+            m_associatedGesture.CurrentIndexLocation = 0;
+            m_associatedGesture.gestureInProgress = false;
+            //log as a fail
         }
     }
 
@@ -89,21 +92,33 @@ public class XRGestureTimeControl : MonoBehaviour
     /// A custom timer coroutine for handling XRGesture timeouts.
     /// </summary>
     /// <param name="delaySeconds">The delay in seconds before the timer executes.</param>
-    /// <param name="gesture">The XRGesture associated with the timer.</param>
     /// <returns>An IEnumerator representing the timer coroutine.</returns>
-    IEnumerator CustomTimer(float delaySeconds)
+    IEnumerator GestureTimer(float delaySeconds)
     {
         // Wait for the specified delay before executing the rest of the coroutine.
         yield return new WaitForSeconds(delaySeconds);
 
         // Log a message indicating that the timer has completed.
-        Debug.Log($"Timer instance {this} failed");
+        Debug.Log($"Gesture timer {this} failed");
 
         // Handle the timeout for the associated XRGesture.
         // For example, cancel the gesture and reset the index to 0.
         m_associatedGesture.CurrentIndexLocation = 0;
         m_associatedGesture.gestureInProgress = false;
+        if(indexerTimer != null)
+        {
+            StopCoroutine(indexerTimer);
+        }
     }
+
+    IEnumerator IterationTimer(float delaySeconds)
+    {
+        yield return GestureTimer(delaySeconds);
+        // Log a message indicating that the timer has completed.
+        Debug.Log($"Iterator timer {this} failed");
+
+    }
+
 
     #endregion
 
