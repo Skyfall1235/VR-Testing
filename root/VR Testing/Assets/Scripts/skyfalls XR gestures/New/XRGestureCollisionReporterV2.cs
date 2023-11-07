@@ -33,6 +33,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Burst;
 using UnityEngine.Events;
+using System.Linq;
+
 
 public class XRGestureCollisionReporterV2 : MonoBehaviour
 {
@@ -41,6 +43,8 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
         TrackedGestureObjects = trackedObjects;
         OnTriggerEvent = triggerEvent;
     }
+
+    [SerializeField] bool m_retryLinkToGestureOnValidate = false;
 
     /// <summary>
     /// The tracked gesture objects.
@@ -56,12 +60,17 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
         set { m_trackedGestureObjects = value; }
     }
 
-    public UnityEvent OnTriggerEvent = new UnityEvent();
+    public UnityEvent OnTriggerEvent;
 
-    public virtual void TriggerEvent()
+
+    private void OnValidate()
     {
-        OnTriggerEvent.Invoke();
+        if (m_retryLinkToGestureOnValidate)
+        {
+            RetryLinkWithGesture(gameObject.transform.parent.gameObject);
+        }
     }
+
 
     [BurstCompile]
     private bool DetermineObjectCollision(Collider otherObject)
@@ -70,7 +79,8 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
 
         foreach(XRGestureObject obj in trackedObjects)
         {
-            if(otherObject.Equals(obj))
+            //if the objects ID and compare it against the list of tracked objects
+            if(otherObject.GetInstanceID() == obj.GestureObject.GetInstanceID())
             {
                 return true;
             }
@@ -78,15 +88,46 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
         return false;
     }
 
+    
+
+    public void RetryLinkWithGesture(GameObject XRGestureGameObject)
+    {
+        if (XRGestureGameObject.GetComponent<XRGesture>() != null)
+        {
+            // Assign and cache the components we wish to add and link
+            XRGesture parentXRG = XRGestureGameObject.GetComponent<XRGesture>();;
+
+            // Set the tracked object to the reporter
+            m_trackedGestureObjects = parentXRG.RelevantGestureObjects;
+
+            //Create a new unity event, store it in the Gesture, and assign it to the OnTriggerEvent in the reporter
+            parentXRG.OnGestureCollideEvent.Add(new UnityEvent());
+            UnityEvent newEvent = parentXRG.OnGestureCollideEvent.LastOrDefault();
+            OnTriggerEvent = newEvent;
+            m_retryLinkToGestureOnValidate = false;
+            Debug.Log($"Collision Reporter ID:{gameObject.GetInstanceID()} successfully linked");
+        }
+        else
+        {
+            Debug.LogWarning($" Could not assign tracked object list to collider ID:{XRGestureGameObject.GetInstanceID()} \n Please manually assign in the inspector");
+        }
+    }
+
+
+
     private void OnTriggerEnter(Collider other)
     {
-        //if its on, its able to be interacted with.
+        // if the reporter is on, its able to be interacted with.
         
         // check the collision to make sure its the tracked object.
+        // if it isnt the tracked object we wish to use, return
+        if (!DetermineObjectCollision(other)) { return; }
 
-        //if it is, iterate the gesture, turn itself off,
-        //run unity job only after youve confirmed the object is needed.
+        // invoke its unity event
+        OnTriggerEvent.Invoke();
 
-        //job consists of starting the manager to shift the next item over, starting the managers toggle to show the current and next colliders.
+        // if it is, iterate the gesture, turn itself off
+
+
     }
 }

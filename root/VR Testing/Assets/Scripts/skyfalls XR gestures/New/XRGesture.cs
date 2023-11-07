@@ -5,6 +5,9 @@ using Unity.Burst;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEditor;
+using Unity.Jobs;
+using Unity.Collections;
+using Unity.Jobs.LowLevel.Unsafe;
 
 //lOCATE UNFINISHED WORK BY LOOKING THESE
 //NOT FINISHED
@@ -122,6 +125,8 @@ public class XRGesture : MonoBehaviour
     public List<UnityEvent> OnGestureCollideEvent;
     public UnityEvent OnGestureEndEvent = new();
     public UnityEvent OnGestureCancelEvent = new();
+
+
     #endregion
 
     private void OnValidate()
@@ -136,23 +141,33 @@ public class XRGesture : MonoBehaviour
 
 
 
-
-
-
-
     //we need to run this at runtime, or at least have it precalculated.
+    [BurstCompile]
     private void CompileChildrenColliders()
     {
         //empty the list of colliders and the unity event list, and recompile
+        // Get an array of all children of the parent GameObject.
+        GameObject[] childrenGameObjects = new GameObject[gameObject.transform.childCount];
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            childrenGameObjects[i] = gameObject.transform.GetChild(i).gameObject;
+        }
+        Debug.Log($"children list size is -> {childrenGameObjects.Length}");
+
+        // Schedule the job.
 
 
-        CompileColliderEvents();
+        CompileColliderEvents(childrenGameObjects);
     }
 
-    private void CompileColliderEvents()
+    private void CompileColliderEvents(GameObject[] colliderReporter)
     {
         //for each item in the collider list, go through its components and find the Collision Reporter.
         //grab its unity event, add it to the event list.
+
     }
 
+    
+
 }
+
