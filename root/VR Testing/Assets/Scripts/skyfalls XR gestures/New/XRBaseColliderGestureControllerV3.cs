@@ -34,7 +34,6 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 
-[RequireComponent(typeof(Collider))] // for the generatio aspect
 public class XRBaseColliderGestureControllerV3 : MonoBehaviour
 {
     #region Inspector Variables

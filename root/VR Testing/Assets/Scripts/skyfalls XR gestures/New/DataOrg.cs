@@ -1,11 +1,9 @@
-
-#region Data Structures 
-#region struct hell
-
-using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
-using UnityEngine.Events;
+
+#region Data Structures 
+
+#region struct hell
 
 /// <summary>
 /// Represents the initialization information for detection colliders.
@@ -36,7 +34,6 @@ public struct detectionColliderData
     public DetectionShapeSettings basicCollider;
 
 }
-
 
 /// <summary>
 /// Represents the data about an object tracked for an XR gesture
@@ -153,9 +150,10 @@ public struct DetectionShapeSettings
     }
 }
 
-
 #endregion
+
 #region enums
+
 /// <summary>
 /// Represents the input trigger types for a gesture.
 /// </summary>
@@ -192,6 +190,8 @@ public enum GestureInputTriggerType
     /// </summary>
     Other
 }
+
 #endregion
+
 #endregion
 

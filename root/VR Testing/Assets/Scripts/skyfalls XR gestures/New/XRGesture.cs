@@ -138,7 +138,7 @@ public class XRGesture : MonoBehaviour
     }
 
 
-
+    
 
 
     //we need to run this at runtime, or at least have it precalculated.
@@ -150,21 +150,54 @@ public class XRGesture : MonoBehaviour
         GameObject[] childrenGameObjects = new GameObject[gameObject.transform.childCount];
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
+            if(gameObject.transform.GetChild(i).gameObject.GetComponent<XRGestureCollisionReporterV2>() == null)
+            {
+                Debug.LogWarning($"GameObject {gameObject.transform.GetChild(i).gameObject.name} should not be under GameObject {gameObject.name}. Please move it to a different parent object");
+                return;
+            }
             childrenGameObjects[i] = gameObject.transform.GetChild(i).gameObject;
         }
         Debug.Log($"children list size is -> {childrenGameObjects.Length}");
 
-        // Schedule the job.
+        if(childrenGameObjects.Length == 0)
+        {
+            Debug.LogWarning($"Gesture {m_gestureName} contains no children objects, therefore will not compile collider events");
+            return;
+        }
 
 
         CompileColliderEvents(childrenGameObjects);
     }
 
-    private void CompileColliderEvents(GameObject[] colliderReporter)
+    [BurstCompile]
+    private void CompileColliderEvents(GameObject[] colliderReporters)
     {
-        //for each item in the collider list, go through its components and find the Collision Reporter.
-        //grab its unity event, add it to the event list.
+        //in the case of it being null, create it, else just clear the list.
+        if (OnGestureCollideEvent == null) { OnGestureCollideEvent = new(); } else { OnGestureCollideEvent.Clear(); }
 
+        //for each item in the collider list, go through its components and find the Collision Reporter. Grab its unity event, add it to the event list.
+        List<UnityEvent> collisionReporterEventReferences = new List <UnityEvent>();
+
+
+
+        //iterate through each object to confirm that it has the reporter, and if it does, to grab the reference to its unity event
+        foreach(GameObject go in colliderReporters)
+        {
+            XRGestureCollisionReporterV2 reporter = go.GetComponent<XRGestureCollisionReporterV2>();
+            if (reporter != null)
+            {
+                //add it to the end of the list
+                collisionReporterEventReferences.Add(reporter.OnTriggerEvent);
+            }
+            else
+            {
+                //object shouldnt be here or is missing its collision reporting script
+                Debug.LogError($"Collider Event Compiliation has found object {go.name} missing its collision reporter. Please Attach the CollisionReporter script to this gameobject or remove it.");
+            }
+        }
+
+        //save the new compiled events to the event list
+        OnGestureCollideEvent = collisionReporterEventReferences;
     }
 
     

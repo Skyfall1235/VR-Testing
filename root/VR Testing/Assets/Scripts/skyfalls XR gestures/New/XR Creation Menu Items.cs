@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UnityEngine.Events;
 using System.Linq;
 
@@ -50,6 +47,8 @@ public class XRCreationMenuItems
     {
         // Create a custom game object
         GameObject go = new GameObject("XR Gesture Manager");
+
+        // Add the controller script to the new gameobject
         go.AddComponent<XRBaseColliderGestureControllerV3>();
 
         // Ensure it gets reparented if this was a context click (otherwise does nothing)
