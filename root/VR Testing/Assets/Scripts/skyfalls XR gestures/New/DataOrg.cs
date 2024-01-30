@@ -85,6 +85,13 @@ public struct XRGestureObject
         get { return m_startAction; }
         set { m_startAction = value; }
     }
+
+    public XRGestureObject(string name, GameObject trackedGameObject, InputActionProperty startAction)
+    {
+        this.m_name = name;
+        this.m_trackedObject = trackedGameObject;
+        this.m_startAction = startAction;
+    }
 }
 
 /// <summary>

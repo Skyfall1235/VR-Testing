@@ -34,7 +34,7 @@ using UnityEngine;
 using Unity.Burst;
 using UnityEngine.Events;
 using System.Linq;
-
+using UnityEngine.InputSystem;
 
 public class XRGestureCollisionReporterV2 : MonoBehaviour
 {
@@ -77,15 +77,33 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
     {
         List<XRGestureObject> trackedObjects = m_trackedGestureObjects;
 
+        //for this method, we only need to determine if ANY items are on the gesture object list, not a specific one.
         foreach(XRGestureObject obj in trackedObjects)
         {
             //if the objects ID and compare it against the list of tracked objects
-            if(otherObject.GetInstanceID() == obj.GestureObject.GetInstanceID())
-            {
-                return true;
-            }
+            if(otherObject.GetInstanceID() == obj.GestureObject.GetInstanceID()) {return true;}
         }
         return false;
+    }
+
+    //if we want to specific object, we use the method aboves cached value to retrive the speific objec,t which can then be compared against.
+
+    [BurstCompile]
+    private XRGestureObject DetermineSpecificObjectCollision(Collider otherObject) 
+    {
+        List<XRGestureObject> trackedObjects = m_trackedGestureObjects;
+
+        //we find the first gesture that successfully collides. this does mean that there can be stacked collisions,
+        //but if we evaluate it for every collsion, we should be able to determine which objects are in what sequence.   
+        foreach (XRGestureObject obj in trackedObjects)
+        {
+            //if the objects ID and compare it against the list of tracked objects
+            if (otherObject.GetInstanceID() == obj.GestureObject.GetInstanceID()) {return obj;}
+        }
+        //return the most null we can make it, and have the method caller confirm its not an invalid object.
+        InputActionProperty nullAction = new();
+        XRGestureObject emptyObject = new XRGestureObject("", new GameObject(), nullAction);
+        return emptyObject;
     }
 
     
@@ -124,7 +142,7 @@ public class XRGestureCollisionReporterV2 : MonoBehaviour
         if (!DetermineObjectCollision(other)) { return; }
 
         // invoke its unity event
-        OnTriggerEvent.Invoke();
+          //.Invoke();
 
         // if it is, iterate the gesture, turn itself off
 

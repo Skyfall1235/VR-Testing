@@ -150,6 +150,7 @@ public class XRGesture : MonoBehaviour
         GameObject[] childrenGameObjects = new GameObject[gameObject.transform.childCount];
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
+            //check for invalid gameobjects, and if there is one, notify the user and end.
             if(gameObject.transform.GetChild(i).gameObject.GetComponent<XRGestureCollisionReporterV2>() == null)
             {
                 Debug.LogWarning($"GameObject {gameObject.transform.GetChild(i).gameObject.name} should not be under GameObject {gameObject.name}. Please move it to a different parent object");
@@ -159,13 +160,12 @@ public class XRGesture : MonoBehaviour
         }
         Debug.Log($"children list size is -> {childrenGameObjects.Length}");
 
+        //if there are child game objects, we attempt to compile their scripts and references
         if(childrenGameObjects.Length == 0)
         {
-            Debug.LogWarning($"Gesture {m_gestureName} contains no children objects, therefore will not compile collider events");
+            Debug.LogWarning($"Gesture {m_gestureName} contains no child objects, therefore will not compile collider events");
             return;
         }
-
-
         CompileColliderEvents(childrenGameObjects);
     }
 
